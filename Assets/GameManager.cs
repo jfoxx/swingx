@@ -4,13 +4,25 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour 
 {
+	public GameObject[] checkpoints;
 	GameObject player;
 	public int currentLevel;
-	
+	public int totalCheckpoints;
+	public int reachedCheckpoints;
+	public GameState gameState;
+	public bool allCheckpointsReached = false;
+	public GameObject gate;
+
 	void Start ( ) 
 	{
+		gameState = GameState.Instance;
 		currentLevel = Application.loadedLevel;
 		player = GameObject.Find("Player");
+		checkpoints = GameObject.FindGameObjectsWithTag("Checkpoint");
+		totalCheckpoints = checkpoints.Length;
+		reachedCheckpoints = 0;
+		gate = GameObject.Find("Gate");
+
 	}
 	
 	void Update ( ) 
@@ -18,35 +30,25 @@ public class GameManager : MonoBehaviour
 		if (player == null) {
 			Application.LoadLevel(currentLevel);
 		}
-	}
-	
-	void checkpointReached( int type )
-	{
-		if ( ( CheckPointType ) type == CheckPointType.Start ) {
-			CP_Start ( );
+		if (reachedCheckpoints >= totalCheckpoints && !allCheckpointsReached){
+			allCheckpointsReached = true;
 		}
-		if ( ( CheckPointType ) type == CheckPointType.Checkpoint ) {
-			CP_Checkpoint ( );
-		}
-		if ( ( CheckPointType ) type == CheckPointType.Finish ) {
-			CP_Finish ( );
+		if (allCheckpointsReached) {
+			if(gate != null){
+				Destroy(gate);
+			}
 		}
 	}
-	
-	void CP_Finish ( )
+
+	void OnFinish ()
 	{
-		//show win screen and next and stuff
-		Application.LoadLevel( currentLevel);
+		Application.LoadLevel(currentLevel);
 	}
 	
-	void CP_Start ( )
+	void checkpointReached()
 	{
-		
-	}
-	
-	void CP_Checkpoint ( )
-	{
-		
+		reachedCheckpoints ++;
+
 	}
 }
 
