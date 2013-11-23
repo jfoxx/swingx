@@ -56,13 +56,13 @@ public class PlayerControll : MonoBehaviour
 
 			if (myhit != null && myhit.transform != null) {
 				Debug.Log(myhit.transform.name);
-				if (myhit.transform.CompareTag ("Checkpoint")) {
-					grapplePosition = myhit.transform.position;
+				//if (myhit.transform.CompareTag ("Checkpoint")) {
+					grapplePosition = myhit.point;
 					Debug.Log("yepp");
 					myhit.transform.SendMessage ("onHit", SendMessageOptions.DontRequireReceiver);
 					grappleSet = true;
 					spring.enabled = true;
-				}
+//				}
 			}
 		}
 		
