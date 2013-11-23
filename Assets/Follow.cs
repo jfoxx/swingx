@@ -4,6 +4,7 @@ using System.Collections;
 public class Follow : MonoBehaviour {
 
 	public Transform target;
+	public GameObject finish;
 	Vector3 targetPosition;
 	public float minDistance;
 	public float maxDistance;
@@ -13,7 +14,8 @@ public class Follow : MonoBehaviour {
 	
 	void Start () 
 	{
-		targetPosition = transform.position;
+		finish = GameObject.Find("Finish");
+		targetPosition = finish.transform.position;
 		distance = maxDistance;
 	}
 	
@@ -35,9 +37,13 @@ public class Follow : MonoBehaviour {
 	{
 		if (target != null) 
 		{
+			if(Time.time > 3){
+				targetPosition = new Vector3(target.transform.position.x, target.transform.position.y , -distance);
+				//transform.LookAt(target.transform);
+			}else{
+				targetPosition = new Vector3(finish.transform.position.x, finish.transform.position.y , -20);
+			}
 			
-			targetPosition = new Vector3(target.transform.position.x, target.transform.position.y , -distance);
-			//transform.LookAt(target.transform);
 		}
 		else
 		{

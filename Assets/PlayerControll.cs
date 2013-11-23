@@ -52,7 +52,7 @@ public class PlayerControll : MonoBehaviour
 
 		if (grappleStart) {
 
-			RaycastHit2D myhit = Physics2D.Raycast (transform.position, -(transform.position - aimTransform.position), 10000f);
+			RaycastHit2D myhit = Physics2D.Raycast (transform.position, -(transform.position - aimTransform.position), 20f);
 
 			if (myhit != null && myhit.transform != null) {
 				Debug.Log(myhit.transform.name);
