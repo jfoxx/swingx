@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Swingx | Swing for the fences</title>
+	<script type='text/javascript' src='https://ssl-webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/jquery.min.js'></script>
+	<script type="text/javascript">
+		<!--
+		var unityObjectUrl = "http://webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/UnityObject2.js";
+		if (document.location.protocol == 'https:')
+			unityObjectUrl = unityObjectUrl.replace("http://", "https://ssl-");
+		document.write('<script type="text\/javascript" src="' + unityObjectUrl + '"><\/script>');
+	-->
+</script>
+<script type="text/javascript">
+	<!--
+	var config = {
+		width: 960, 
+		height: 600,
+		params: { enableDebugging:"0" }
+
+	};
+	var u = new UnityObject2(config);
+
+	jQuery(function() {
+
+		var $missingScreen = jQuery("#unityPlayer").find(".missing");
+		var $brokenScreen = jQuery("#unityPlayer").find(".broken");
+		$missingScreen.hide();
+		$brokenScreen.hide();
+
+		u.observeProgress(function (progress) {
+			switch(progress.pluginStatus) {
+				case "broken":
+				$brokenScreen.find("a").click(function (e) {
+					e.stopPropagation();
+					e.preventDefault();
+					u.installPlugin();
+					return false;
+				});
+				$brokenScreen.show();
+				break;
+				case "missing":
+				$missingScreen.find("a").click(function (e) {
+					e.stopPropagation();
+					e.preventDefault();
+					u.installPlugin();
+					return false;
+				});
+				$missingScreen.show();
+				break;
+				case "installed":
+				$missingScreen.remove();
+				break;
+				case "first":
+				break;
+			}
+		});
+		u.initPlugin(jQuery("#unityPlayer")[0], "Swingx-0.2-alpha.unity3d");
+	});
+-->
+</script>
+
+
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="jumbotron">
+				<h1>Swinx</h1>
+			</div> 
+		</div>
+		<div class="row">
+			<div class="col-md-9">
+				<div class="content">
+					<div id="unityPlayer">
+						<div class="missing">
+							<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
+								<img alt="Unity Web Player. Install now!" src="http://webplayer.unity3d.com/installation/getunity.png" width="193" height="63" />
+							</a>
+						</div>
+						<div class="broken">
+							<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now! Restart your browser after install.">
+								<img alt="Unity Web Player. Install now! Restart your browser after install." src="http://webplayer.unity3d.com/installation/getunityrestart.png" width="193" height="63" />
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						instructions
+					</div>
+					<div class="panel-body">
+						<p> Go left with "A" </p>
+						<p> Go right with  "D" </p>
+						<p> Aim up with "W" </p>
+						<p> Aim down with "S" </p>
+						<p> Jump with "Space" </p>
+						<p> Grip and Swing with "Left Control" or "Left Mouse Button" </p>
+						<br/>
+						<p> To complete a level you need to find all the red circles!</p>
+						<p><h3>but most importantly - Swing for the fences!</h3></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">	
+			
+			<div class="col-md-6">
+				<div class="panel panel-warning" ng-app="chat" ng-controller="Chat">
+					<div class="panel-heading">
+						Chat
+					</div>
+					<div class="panel-body">
+						
+
+						<form class="form-inline">
+							Your name: <input class="form-control" type="text" ng-model="username">
+						</form>
+						<div ng-cloak ng-repeat="message in messages">
+							<em>{{message.from}}: </em>{{message.content}}
+						</div><br/>
+
+					</div>
+					<div class="panel-footer">
+						<form class="control-group" ng-submit="addMessage()">
+							<input class="form-control" type="text" ng-model="message" placeholder="Message...">
+							<button class="btn btn-success pull-right" type="submit">
+								<i class="icon-reply"> Send</i>
+							</button>
+							<div class="clearfix"></div>
+						</form>
+						
+					</div>
+				</div>
+				<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.5/angular.min.js"></script>
+				<script src="//cdn.firebase.com/v0/firebase.js"></script>
+				<script src="//cdn.firebase.com/libs/angularfire/0.3.0/angularfire.min.js"></script>
+				<script type="text/javascript">
+					angular.module('chat', ['firebase']).controller('Chat', ['$scope', 'angularFire',
+						function($scope, angularFire) {
+							var ref = new Firebase('https://angularfire.firebaseio.com/chat');
+							angularFire(ref.limit(15), $scope, "messages");
+							$scope.username = 'Guest' + Math.floor(Math.random()*101);
+							$scope.addMessage = function() {
+								$scope.messages[ref.push().name()] = {
+									from: $scope.username, content: $scope.message
+								};
+								$scope.message = "";
+							}}]);
+				</script>
+				
+			</div>
+		</div>
+	</div>
+
+	<link href="//netdna.bootstrapcdn.com/bootswatch/3.0.1/cyborg/bootstrap.min.css" rel="stylesheet">
+
+</body>
+</html>
+
+
