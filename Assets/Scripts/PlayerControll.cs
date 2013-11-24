@@ -52,7 +52,7 @@ public class PlayerControll : MonoBehaviour
 
 		if (grappleStart) {
 
-			RaycastHit2D myhit = Physics2D.Raycast (transform.position, -(transform.position - aimTransform.position), 20f);
+			RaycastHit2D myhit = Physics2D.Raycast (transform.position, -(transform.position - aimTransform.position), 1000f);
 
 			if (myhit != null && myhit.transform != null) {
 				Debug.Log(myhit.transform.name);
@@ -137,9 +137,9 @@ public class PlayerControll : MonoBehaviour
 			
 		}
 		
-		if (rigidbody2D.velocity.magnitude > maxFreeSpeed) {
-			rigidbody2D.velocity = Vector3.ClampMagnitude (rigidbody2D.velocity, maxFreeSpeed);
-		}
+//		if (rigidbody2D.velocity.magnitude > maxFreeSpeed) {
+//			rigidbody2D.velocity = Vector3.ClampMagnitude (rigidbody2D.velocity, maxFreeSpeed);
+//		}
 		
 		if (jumping && grounded) {
 			//audio.clip = jumpSound;

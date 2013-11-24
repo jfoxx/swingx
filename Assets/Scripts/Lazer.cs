@@ -15,17 +15,17 @@ public class Lazer : MonoBehaviour {
 		player = GameObject.Find ("Player");
 
 		line = GetComponent<LineRenderer> ();
-		line.SetWidth (0.1f, 0.01f);
+		line.SetWidth (0.04f, 0.04f);
 	}
 	
 	void Update ()
 	{
 
-		RaycastHit2D hit = Physics2D.Raycast (transform.position, transform.TransformDirection(Vector2.right), 20f);
+		RaycastHit2D hit = Physics2D.Raycast (transform.position, transform.TransformDirection(Vector2.right), 1000f);
 		if(hit.transform != null){
 			target = hit.point;
 		}else{
-			target = transform.TransformPoint(Vector2.right * 100);
+			target = transform.TransformPoint(Vector2.right * 10000);
 		}
 
 		line.SetPosition (0, transform.position);
