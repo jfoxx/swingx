@@ -37,7 +37,6 @@ public class GameState : MonoBehaviour
 	}
 
 	void OnLevelWasLoaded(){
-		Debug.Log("hahahah");
 		showMenu = false;
 	}
 	// Sets the instance to null when the application quits

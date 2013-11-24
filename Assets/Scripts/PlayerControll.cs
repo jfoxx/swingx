@@ -55,14 +55,11 @@ public class PlayerControll : MonoBehaviour
 			RaycastHit2D myhit = Physics2D.Raycast (transform.position, -(transform.position - aimTransform.position), 1000f);
 
 			if (myhit != null && myhit.transform != null) {
-				Debug.Log(myhit.transform.name);
-				//if (myhit.transform.CompareTag ("Checkpoint")) {
+				Debug.Log("grabbed " + myhit.transform.name);
 					grapplePosition = myhit.point;
-					Debug.Log("yepp");
 					myhit.transform.SendMessage ("onHit", SendMessageOptions.DontRequireReceiver);
 					grappleSet = true;
 					spring.enabled = true;
-//				}
 			}
 		}
 		
@@ -73,19 +70,15 @@ public class PlayerControll : MonoBehaviour
 		}
 		
 		if (grappleStay && grappleSet) {
-			
-			//grapplePosition = hit.transform.position;
 			grappleTimer -= Time.deltaTime;
-			Debug.DrawLine (transform.position, spring.connectedBody.transform.position, Color.red);
-			//spring.connectedBody.transform.position = transform.position;
-			
+			Debug.DrawLine (transform.position, spring.connectedBody.transform.position, Color.red);			
 		}
 		
 		if (!grappleSet) {
 			grapplePosition = transform.position;
 			spring.enabled = false;
-			
 		}
+
 		spring.connectedBody.transform.position = grapplePosition;
 
 	}

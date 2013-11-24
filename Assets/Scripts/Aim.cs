@@ -27,18 +27,23 @@ public class Aim : MonoBehaviour
 	void Update ()
 	{        
 	
-		if (vertical != 0) {        
-			if (transform.localEulerAngles.z > 0) {
-				transform.Rotate (0, 0, vertical * sensitivity * 30 * Time.deltaTime);
-			} else {
-				transform.Rotate (0, 0, vertical * -sensitivity * 30 * Time.deltaTime);
-			}
+		if (vertical != 0) 
+		{        
+			transform.Rotate (0, 0, vertical * -sensitivity * 30 * Time.deltaTime);
 		}
-		if (horizontal < 0) {
-			transform.rotation = Quaternion.Euler (0, 180, transform.localEulerAngles.z);
+
+		if (horizontal < 0) 
+		{
+			transform.eulerAngles = new Vector3 (0, 0, transform.localEulerAngles.z);
 		}
-		if (horizontal > 0) {
-			transform.rotation = Quaternion.Euler (0, 0, transform.localEulerAngles.z);
+
+		if (horizontal > 0) 
+		{
+			transform.eulerAngles = new Vector3 (0, 180, transform.localEulerAngles.z);
 		}
+
+		transform.eulerAngles = new Vector3 (0.0f, transform.localEulerAngles.y, Mathf.Clamp (transform.localEulerAngles.z, 90, 270));
+
 	}
+
 }

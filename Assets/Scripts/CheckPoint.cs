@@ -24,14 +24,26 @@ public class CheckPoint : MonoBehaviour
 		
 	}
 
-	void onHit ()
-	{
-		Debug.Log ("i was Grabbed!!");
-		if (!isChecked) {
-			isChecked = true;
-			gameManager.SendMessage ("checkpointReached");
-			if (myRenderer != null) {
-				myRenderer.color = Color.green;
+//	void onHit ()
+//	{
+//		Debug.Log ("i was Grabbed!!");
+//		if (!isChecked) {
+//			isChecked = true;
+//			gameManager.SendMessage ("checkpointReached");
+//			if (myRenderer != null) {
+//				myRenderer.color = Color.green;
+//			}
+//		}
+//	}
+
+	void OnTriggerEnter2D(Collider2D other) {
+		if(other.transform.CompareTag("Player")){
+			if (!isChecked) {
+				isChecked = true;
+				gameManager.SendMessage ("checkpointReached");
+				if (myRenderer != null) {
+					myRenderer.color = Color.green;
+				}
 			}
 		}
 	}
