@@ -64,85 +64,99 @@
 
 </head>
 <body>
-	<div class="container">
+	<div class="containera" style="padding: 10px;">
+		
 		<div class="row">
-			<div class="jumbotron">
-				<h1>Swinx</h1>
-			</div> 
-		</div>
-		<div class="row">
+
 			<div class="col-md-9">
-				<div class="content">
-					<div id="unityPlayer">
-						<div class="missing">
-							<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
-								<img alt="Unity Web Player. Install now!" src="http://webplayer.unity3d.com/installation/getunity.png" width="193" height="63" />
-							</a>
-						</div>
-						<div class="broken">
-							<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now! Restart your browser after install.">
-								<img alt="Unity Web Player. Install now! Restart your browser after install." src="http://webplayer.unity3d.com/installation/getunityrestart.png" width="193" height="63" />
-							</a>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						Swingx
+					</div>
+						<div class="panel-body">
+							
+						<div class="content">
+							<div id="unityPlayer">
+								<div class="missing">
+									<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
+										<img alt="Unity Web Player. Install now!" src="http://webplayer.unity3d.com/installation/getunity.png" width="193" height="63" />
+									</a>
+								</div>
+								<div class="broken">
+									<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now! Restart your browser after install.">
+										<img alt="Unity Web Player. Install now! Restart your browser after install." src="http://webplayer.unity3d.com/installation/getunityrestart.png" width="193" height="63" />
+									</a>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-3">
-				<div class="panel panel-primary">
+				<div class="panel panel-warning">
 					<div class="panel-heading">
 						instructions
 					</div>
 					<div class="panel-body">
-						<p> Go left with "A" </p>
-						<p> Go right with  "D" </p>
-						<p> Aim up with "W" </p>
-						<p> Aim down with "S" </p>
+						<p> Go left with "A" or "left-arrow"</p>
+						<p> Go right with  "D" or "right-arrow"</p>
+						<p> Aim up with "W" or "up-arrow" </p>
+						<p> Aim down with "S" or "down-arrow"</p>
 						<p> Jump with "Space" </p>
 						<p> Grip and Swing with "Left Control" or "Left Mouse Button" </p>
+						<p> zoom in and out with "scroll-wheel"</p>
 						<br/>
 						<p> To complete a level you need to find all the red circles!</p>
 						<p><h3>but most importantly - Swing for the fences!</h3></p>
 					</div>
 				</div>
+				<div class="panel panel-info" ng-app="chat" ng-controller="Chat">
+					<div class="panel-heading">
+					<div class="panel-title">
+						Chat
+					</div>
+						
+						<form class="form" ng-submit="addMessage()">
+							<div class="form-group">
+								<label class="sr-only" for="uname">your name</label>
+								<input id="uname" class="form-control input-sm" type="text" ng-model="username">
+							</div>
+							<div class="form-group">
+								<label class="sr-only" for="message">message</label>
+								<input id="message" class="form-control input-sm" type="text" ng-model="message" placeholder="Message...">
+							</div>
+							<button class="btn btn-success btn-sm" type="submit">
+								<i class="icon-reply"> Send</i>
+							</button>
+						</form>
+					</div>
+					
+						<ul class="list-group pre-scrollable">
+							<li class="list-group-item" ng-cloak ng-repeat="message in messages">
+								<span class="label label-primary">{{message.from}} :&nbsp;</span> <br/>{{message.content}}
+							</li>
+						</ul>
+					
+					<div class="panel-footer-aa">
+						
+					</div>
 			</div>
 		</div>
 		<div class="row">	
 			
-			<div class="col-md-6">
-				<div class="panel panel-warning" ng-app="chat" ng-controller="Chat">
-					<div class="panel-heading">
-						Chat
-					</div>
-					<div class="panel-body">
-						
-
-						<form class="form-inline">
-							Your name: <input class="form-control" type="text" ng-model="username">
-						</form>
-						<div ng-cloak ng-repeat="message in messages">
-							<em>{{message.from}}: </em>{{message.content}}
-						</div><br/>
-
-					</div>
-					<div class="panel-footer">
-						<form class="control-group" ng-submit="addMessage()">
-							<input class="form-control" type="text" ng-model="message" placeholder="Message...">
-							<button class="btn btn-success pull-right" type="submit">
-								<i class="icon-reply"> Send</i>
-							</button>
-							<div class="clearfix"></div>
-						</form>
-						
-					</div>
+			
+			<div class="col-md-10">
+				
 				</div>
+
 				<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.5/angular.min.js"></script>
 				<script src="//cdn.firebase.com/v0/firebase.js"></script>
 				<script src="//cdn.firebase.com/libs/angularfire/0.3.0/angularfire.min.js"></script>
 				<script type="text/javascript">
 					angular.module('chat', ['firebase']).controller('Chat', ['$scope', 'angularFire',
 						function($scope, angularFire) {
-							var ref = new Firebase('https://angularfire.firebaseio.com/chat');
-							angularFire(ref.limit(15), $scope, "messages");
+							var ref = new Firebase('https://swingx.firebaseio.com/chat');
+							angularFire(ref.limit(1000), $scope, "messages");
 							$scope.username = 'Guest' + Math.floor(Math.random()*101);
 							$scope.addMessage = function() {
 								$scope.messages[ref.push().name()] = {
