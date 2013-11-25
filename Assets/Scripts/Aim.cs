@@ -21,7 +21,7 @@ public class Aim : MonoBehaviour
 
 	void Start ()
 	{
-		
+		transform.eulerAngles = new Vector3(0, 0, 150f);
 	}
 	
 	void Update ()
@@ -43,7 +43,7 @@ public class Aim : MonoBehaviour
 		}
 
 		transform.eulerAngles = new Vector3 (0.0f, transform.localEulerAngles.y, Mathf.Clamp (transform.localEulerAngles.z, 90, 270));
-
+		Debug.Log(transform.eulerAngles);
 	}
 
 }
