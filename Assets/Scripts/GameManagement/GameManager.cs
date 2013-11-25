@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(SoundEffects))]
 public class GameManager : MonoBehaviour 
 {
 	public GameState gameState;
@@ -69,7 +70,12 @@ public class GameManager : MonoBehaviour
 	void checkpointReached()
 	{
 		reachedCheckpoints ++;
+		gameObject.SendMessage("OnCheckpointReached");
 
+	}
+	void OnGUI()
+	{
+		GUI.Box(new Rect (Screen.width - 200, Screen.height - 80, 200, 30), "Red circles found: " + reachedCheckpoints + "/" + totalCheckpoints);
 	}
 }
 

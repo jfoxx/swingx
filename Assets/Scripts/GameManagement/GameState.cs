@@ -66,5 +66,6 @@ public class GameState : MonoBehaviour
 	void OnGUI(){
 
 		GUI.Label(new Rect (Screen.width/2 - 15, 30, 300, 30), currentLevel);
+
 	}
 }
