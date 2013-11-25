@@ -17,6 +17,10 @@ public class StartGame : MonoBehaviour {
 			startGame();
 		}
 	}
+
+	void OnClick(){
+		startGame();
+	}
 	private void startGame()
 	{
 		Debug.Log("Starting game");
