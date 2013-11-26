@@ -15,7 +15,7 @@ public class Lazer : MonoBehaviour {
 		player = GameObject.Find ("Player");
 
 		line = GetComponent<LineRenderer> ();
-		line.SetWidth (0.04f, 0.04f);
+		line.SetWidth (0.1f, 0.1f);
 	}
 	
 	void Update ()
