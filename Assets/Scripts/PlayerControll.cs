@@ -34,7 +34,7 @@ public class PlayerControll : MonoBehaviour
 	void Update ()
 	{
 
-		RaycastHit2D groundScanner = Physics2D.Raycast (transform.position, -Vector2.up, 1f) ;
+		RaycastHit2D groundScanner = Physics2D.Raycast (transform.position, -Vector2.up, 1.7f) ;
 
 		grounded = groundScanner.transform != null;
 

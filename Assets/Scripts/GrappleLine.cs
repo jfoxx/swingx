@@ -15,7 +15,7 @@ public class GrappleLine : MonoBehaviour
 		player = GameObject.Find ("Player");
 		grapple = GameObject.Find ("GrapplePoint");
 		line = GetComponent<LineRenderer> ();
-		line.SetWidth (0.05f, 0.05f);
+		line.SetWidth (0.2f, 0.2f);
 
 	}
 
