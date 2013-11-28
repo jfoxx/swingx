@@ -7,12 +7,11 @@ public class Follow : MonoBehaviour
 	public Transform target;
 	public GameObject finish;
 	Vector3 targetPosition;
-	public float minDistance = 5;
-	public float maxDistance = 60;
-	public float distance;
-	public float scrollSpeed = 100;
-	public float inspectFinishTimer = 0;
-	public float inspectFinishTime = 3;
+	float minDistance = 20;
+	float maxDistance = 60;
+	float distance;
+	float inspectFinishTimer = 0;
+	float inspectFinishTime = 2;
 	
 	void Start ()
 	{

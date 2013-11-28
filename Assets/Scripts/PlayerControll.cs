@@ -18,11 +18,18 @@ public class PlayerControll : MonoBehaviour
 	public float walkFriction = 1.5f;
 	public int state = 0;
 	public float jumpLimit = 0;
-	public Vector2 grapplePosition;
+
 	public SpringJoint2D spring;
+	public Vector2 grapplePosition;
+
 	public float grappleTime = 30;
 	public float grappleTimer;
 	public bool grappleSet = false;
+
+	public float maxGrappleLength = 1;
+	public float minGrappleLength = 20;
+
+
 
 	void Start ()
 	{
@@ -33,6 +40,8 @@ public class PlayerControll : MonoBehaviour
 
 	void Update ()
 	{
+		spring.distance += scroll;
+
 
 		RaycastHit2D groundScanner = Physics2D.Raycast (transform.position, -Vector2.up, 1.7f) ;
 
@@ -66,6 +75,7 @@ public class PlayerControll : MonoBehaviour
 		if (grappleExit || grappleTimer <= 0) {
 			grappleSet = false;
 			grappleTimer = grappleTime;
+
 			
 		}
 		
@@ -77,10 +87,17 @@ public class PlayerControll : MonoBehaviour
 		if (!grappleSet) {
 			grapplePosition = transform.position;
 			spring.enabled = false;
+			spring.distance =1;
 		}
 
 		spring.connectedBody.transform.position = grapplePosition;
 
+	}
+
+	public virtual float scroll {
+		get {
+			return Input.GetAxis ("Scroll");
+		} 
 	}
 	
 	public virtual bool jump {

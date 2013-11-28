@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour
 
 	public bool allCheckpointsReached = false;
 
+	//not implemented
+	float waitAfterFinishTimer = 0;
+	float waitAfterFinishTime = 1;
+	
 	private static GameManager instance;
 
 	public static GameManager Instance
@@ -49,6 +53,7 @@ public class GameManager : MonoBehaviour
 	
 	void Update ( ) 
 	{
+
 		if (player == null) {
 			gameState.setLevel("main");
 		}
@@ -64,6 +69,7 @@ public class GameManager : MonoBehaviour
 
 	void OnFinish ()
 	{
+
 		gameState.setLevel("main");
 	}
 	
@@ -72,6 +78,13 @@ public class GameManager : MonoBehaviour
 		reachedCheckpoints ++;
 		gameObject.SendMessage("OnCheckpointReached");
 
+	}
+
+	void allCheckpointReached()
+	{
+		reachedCheckpoints ++;
+		gameObject.SendMessage("OnAllCheckpointsReached");
+		
 	}
 	void OnGUI()
 	{
