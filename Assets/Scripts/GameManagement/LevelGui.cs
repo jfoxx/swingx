@@ -43,6 +43,14 @@ public class LevelGui : MonoBehaviour {
 			GameState.Instance.setLevel("level2");
 		}
 
+		GUILayout.Space(5);
+		
+		if (GUILayout.Button ("Multiplayer"))
+		{
+			Debug.Log ("StartingMultiplayer");
+			GameState.Instance.setLevel("multiplayer");
+		}
+
 		GUILayout.FlexibleSpace();
 
 		if(!Application.isEditor && !Application.isWebPlayer){

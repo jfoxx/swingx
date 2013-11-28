@@ -5,6 +5,8 @@ public class PlayerControll : MonoBehaviour
 {
 
 	public Transform aimTransform;
+	Rigidbody2D grapplePrefab;
+
 	public bool grounded = false;
 	public bool jumping = false;
 	public float jumpForce = 8;
@@ -12,7 +14,7 @@ public class PlayerControll : MonoBehaviour
 	public AudioClip shootForceLineSound;
 	public float maxSpeed = 20;
 	public float maxFreeSpeed = 60;
-	public float force = 8;
+	public float force = 10;
 	public float airControll = 0.3f;
 	public float controll;
 	public float walkFriction = 1.5f;
@@ -23,16 +25,37 @@ public class PlayerControll : MonoBehaviour
 	public float grappleTime = 30;
 	public float grappleTimer;
 	public bool grappleSet = false;
+	public Animator anim;
 
 	void Start ()
 	{
+		anim = GetComponent<Animator>();
 		spring = GetComponent<SpringJoint2D>();
+		grapplePrefab = transform.FindChild("GrapplePoint").GetComponent<Rigidbody2D>();
+		spring.connectedBody = grapplePrefab;
 		grapplePosition = transform.position;
 		spring.enabled = false;
 	}
 
+	void OnCollisionStay2D (Collision2D coll)
+	{
+		if(coll.transform.CompareTag("Player"))
+		if(coll.relativeVelocity.magnitude > 30 && coll.transform.rigidbody2D.velocity.magnitude > transform.rigidbody2D.velocity.magnitude){
+			Debug.Log("velocity : " + coll.relativeVelocity.magnitude * 0.3f);
+			coll.transform.SendMessage ("applyDamage",coll.relativeVelocity.magnitude);
+		}
+	}
+
 	void Update ()
 	{
+
+
+		if(!networkView.isMine){
+			this.rigidbody2D.gravityScale = 0;
+			return;
+		}
+
+		anim.SetFloat("speed", Mathf.Abs(horizontal));
 
 		RaycastHit2D groundScanner = Physics2D.Raycast (transform.position, -Vector2.up, 1.7f) ;
 
@@ -115,6 +138,7 @@ public class PlayerControll : MonoBehaviour
 	
 	void FixedUpdate ()
 	{
+		if(!networkView.isMine){return;}
 
 		if (horizontal == 0 && grounded) {
 			rigidbody2D.velocity = new Vector2 (rigidbody2D.velocity.x / walkFriction, rigidbody2D.velocity.y);
@@ -130,13 +154,9 @@ public class PlayerControll : MonoBehaviour
 			
 		}
 		
-//		if (rigidbody2D.velocity.magnitude > maxFreeSpeed) {
-//			rigidbody2D.velocity = Vector3.ClampMagnitude (rigidbody2D.velocity, maxFreeSpeed);
-//		}
+
 		
 		if (jumping && grounded) {
-			//audio.clip = jumpSound;
-			//audio.Play();
 			rigidbody2D.velocity = rigidbody2D.velocity + (Vector2.up * jumpForce);
 			jumping = false;
 			

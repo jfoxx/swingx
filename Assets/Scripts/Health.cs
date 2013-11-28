@@ -23,7 +23,7 @@ public class Health : MonoBehaviour
 		}
 		
 	}
-	
+
 	void applyDamage (float damage)
 	{
 		Debug.Log ("damage taken: " + damage);

@@ -28,7 +28,7 @@ public class GameState : MonoBehaviour
 		if (Input.GetKeyDown (KeyCode.Escape)) {
 			showMenu = !showMenu;
 		}
-		if (currentLevel == "main") {
+		if (currentLevel == "main" || currentLevel == "multiplayer") {
 			Screen.lockCursor = false;
 		} else {
 			Screen.lockCursor = !showMenu;

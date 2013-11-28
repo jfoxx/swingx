@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
 	
 	void Update ( ) 
 	{
-		if (player == null) {
+		if (player == null && gameState.getLevel() != "multiplayer") {
 			gameState.setLevel("main");
 		}
 		if (reachedCheckpoints >= totalCheckpoints && !allCheckpointsReached){
