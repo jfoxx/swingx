@@ -26,15 +26,19 @@ public class Follow : MonoBehaviour
 			return Input.GetButton ("zoom");
 		} 
 	}
-	
-	void FixedUpdate ()
-	{
-		
+	void Update(){
+
 		if (zoom) {
 			distance = Mathf.Lerp (distance, maxDistance, 0.4f);
 		} else {
 			distance = Mathf.Lerp (distance, minDistance, 0.4f);
 		}
+
+	}
+	
+	void FixedUpdate ()
+	{
+		
 		
 		if (inspectFinishTimer < inspectFinishTime) {
 			inspectFinishTimer += Time.deltaTime;
