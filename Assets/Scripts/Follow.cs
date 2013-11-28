@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Follow : MonoBehaviour {
+public class Follow : MonoBehaviour
+{
 
 	public Transform target;
 	public GameObject finish;
@@ -13,52 +14,47 @@ public class Follow : MonoBehaviour {
 	public float inspectFinishTimer = 0;
 	public float inspectFinishTime = 3;
 	
-	
-	void Start () 
+	void Start ()
 	{
-		finish = GameObject.Find("Finish");
+		finish = GameObject.Find ("Finish");
 		targetPosition = finish.transform.position;
 		distance = maxDistance;
 	}
 	
-	public virtual float scroll 
-	{
+	public virtual bool zoom {
 		get {
-			return Input.GetAxis ("Scroll");
+			return Input.GetButton ("zoom");
 		} 
 	}
 	
-	void Update() 
+	void FixedUpdate ()
 	{
-		distance = Mathf.Lerp(distance, distance + ( - scroll * scrollSpeed),0.5f);
-		distance = Mathf.Clamp(distance, minDistance, maxDistance);
-	}
-	
-	
-	void FixedUpdate () 
-	{
-		if(inspectFinishTimer < inspectFinishTime){
+		
+		if (zoom) {
+			distance = Mathf.Lerp (distance, maxDistance, 0.4f);
+		} else {
+			distance = Mathf.Lerp (distance, minDistance, 0.4f);
+		}
+		
+		if (inspectFinishTimer < inspectFinishTime) {
 			inspectFinishTimer += Time.deltaTime;
 		}
-		if (target != null) 
-		{
-			if(inspectFinishTimer > inspectFinishTime){
-				targetPosition = new Vector3(target.transform.position.x, target.transform.position.y , -distance);
+
+		if (target != null) {
+			if (inspectFinishTimer > inspectFinishTime) {
+				targetPosition = new Vector3 (target.transform.position.x, target.transform.position.y, -distance);
 				//transform.LookAt(target.transform);
-			}else{
-				targetPosition = new Vector3(finish.transform.position.x, finish.transform.position.y , -20);
+			} else {
+				targetPosition = new Vector3 (finish.transform.position.x, finish.transform.position.y, -20);
 			}
 			
+		} else {
+			Debug.Log ("Player is null in LookAt");
 		}
-		else
-		{
-			Debug.Log("Player is null in LookAt");
+
+		if (targetPosition != transform.position) {
+			transform.position = Vector3.Lerp (transform.position, targetPosition, 0.1f);
 		}
-		if(targetPosition != transform.position)
-		{
-			transform.position = Vector3.Lerp(transform.position, targetPosition, 0.1f);
-		}
-		
-		
+
 	}
 }
