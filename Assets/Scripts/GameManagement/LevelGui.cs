@@ -43,6 +43,14 @@ public class LevelGui : MonoBehaviour {
 			GameState.Instance.setLevel("level2");
 		}
 
+		GUILayout.Space(5);
+		
+		if (GUILayout.Button ("Level 3"))
+		{
+			Debug.Log ("Moving to level 3");
+			GameState.Instance.setLevel("level3");
+		}
+
 		GUILayout.FlexibleSpace();
 
 		if(!Application.isEditor && !Application.isWebPlayer){
