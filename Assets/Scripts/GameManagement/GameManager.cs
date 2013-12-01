@@ -88,7 +88,9 @@ public class GameManager : MonoBehaviour
 	}
 	void OnGUI()
 	{
-		GUI.Box(new Rect (Screen.width - 200, Screen.height - 80, 200, 30), "Red circles found: " + reachedCheckpoints + "/" + totalCheckpoints);
+		if(totalCheckpoints > 0){
+			GUI.Box(new Rect (Screen.width - 200, Screen.height - 80, 200, 30), "Red circles found: " + reachedCheckpoints + "/" + totalCheckpoints);
+		}
 	}
 }
 

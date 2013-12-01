@@ -25,6 +25,9 @@ public class GameState : MonoBehaviour
 
 	void Update ()
 	{
+		if(currentLevel == "" || currentLevel == null){
+			currentLevel = Application.loadedLevelName;
+		}
 		if (Input.GetKeyDown (KeyCode.Escape)) {
 			showMenu = !showMenu;
 		}
