@@ -7,6 +7,7 @@ public class GameState : MonoBehaviour
 	
 	public string currentLevel;
 	public bool showMenu;
+	public bool mouseAim = false;
 	private static GameState instance;
 
 	public static GameState Instance {
@@ -34,7 +35,8 @@ public class GameState : MonoBehaviour
 		if (currentLevel == "main") {
 			Screen.lockCursor = false;
 		} else {
-			Screen.lockCursor = !showMenu;
+//			Screen.lockCursor = !showMenu;
+			Screen.lockCursor = false;
 		}
 
 	}

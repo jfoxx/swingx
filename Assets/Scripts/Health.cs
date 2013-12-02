@@ -4,6 +4,7 @@ using System.Collections;
 public class Health : MonoBehaviour
 {
 
+	public Transform explosionPrefab;
 	public float health;
 	public float max_health = 100;
 	
@@ -38,7 +39,11 @@ public class Health : MonoBehaviour
 	void die ()
 	{
 		Debug.Log ("i died!");
-		Destroy (gameObject);
+		if(explosionPrefab != null){
+			Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+		}
+		Destroy(gameObject);
+		//gameObject.SetActive(false);
 	}
 	
 	void OnDestroy ()

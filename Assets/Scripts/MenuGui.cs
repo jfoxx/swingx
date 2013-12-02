@@ -4,6 +4,7 @@ using System.Collections;
 public class MenuGui : MonoBehaviour {
 
 	GameState state;
+	public bool mouseAim = false;
 	void Start () {
 		state = GameState.Instance;
 	}
@@ -19,6 +20,7 @@ public class MenuGui : MonoBehaviour {
 				GameState.Instance.setLevel("main");
 				Application.LoadLevel("main");
 			}
+			state.mouseAim = GUI.Toggle(new Rect(30, 70, 150, 20), state.mouseAim, "use mouse to aim");
 		}
 	}
 }
