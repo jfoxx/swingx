@@ -3,12 +3,10 @@ using System.Collections;
 
 public class PlayerControll_mp : MonoBehaviour
 {
-
-	public Transform body;
+	
 	public Transform aimTransform;
 	private AudioSource audioSource;
 	public SpringJoint2D spring;
-	Animator anim;
 	
 	public AudioClip grappleHit;
 	public AudioClip grappleMiss;
@@ -42,7 +40,6 @@ public class PlayerControll_mp : MonoBehaviour
 		grapplePosition = transform.position;
 		spring.enabled = false;
 		audioSource = GetComponent<AudioSource> ();
-		anim = GetComponentInChildren<Animator>();
 
 		if(!networkView.isMine){
 			this.rigidbody2D.gravityScale = 0;
@@ -62,6 +59,9 @@ public class PlayerControll_mp : MonoBehaviour
 
 	void Update ()
 	{
+
+		if(!networkView.isMine){return;}
+
 		spring.distance += scroll;
 	
 		RaycastHit2D groundScanner = Physics2D.Raycast (transform.position, -Vector2.up, 3f);
@@ -78,15 +78,7 @@ public class PlayerControll_mp : MonoBehaviour
 		if (jump && grounded) {
 			jumping = true;
 		}
-
-		anim.SetBool("grounded",grounded);
-
-		if(horizontal != 0){
-			anim.SetTrigger("walk");
-		}else{
-			anim.SetTrigger("idle");
-		}
-
+	
 		if (!grounded) {
 			controll = airControll;
 		} else {
@@ -170,6 +162,7 @@ public class PlayerControll_mp : MonoBehaviour
 	
 	void FixedUpdate ()
 	{
+		if(!networkView.isMine){return;}
 
 		if (horizontal == 0 && grounded) {
 			rigidbody2D.velocity = new Vector2 (rigidbody2D.velocity.x / walkFriction, rigidbody2D.velocity.y);
@@ -178,13 +171,6 @@ public class PlayerControll_mp : MonoBehaviour
 		// If the object is grounded and isn't moving at the max speed or higher apply force to move it
 		if (rigidbody2D.velocity.magnitude < maxSpeed && grounded && horizontal != 0) {
 			rigidbody2D.AddForce (Vector2.right * horizontal * force * controll);
-		}
-
-		if(horizontal<0){
-			body.transform.localScale = new Vector3(-1,body.transform.localScale.y,body.transform.localScale.z);
-		}
-		if(horizontal>0){
-			body.transform.localScale = new Vector3(1,body.transform.localScale.y,body.transform.localScale.z);
 		}
 
 		// moving right
