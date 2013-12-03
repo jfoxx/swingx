@@ -4,29 +4,37 @@ using System.Collections;
 public class PlayerControll : MonoBehaviour
 {
 
+	public Transform body;
+	public Transform aimTransform;
+	private AudioSource audioSource;
+	public SpringJoint2D spring;
+	Animator anim;
+	
 	public AudioClip grappleHit;
 	public AudioClip grappleMiss;
 	public AudioClip bumpSound;
-	public Transform aimTransform;
+
 	public bool grounded = false;
 	public bool jumping = false;
+
 	public float jumpForce = 8;
+	public float force = 8;
+
 	public float maxSpeed = 20;
 	public float maxFreeSpeed = 60;
-	public float force = 8;
-	public float airControll = 0.3f;
+
 	public float controll;
+	public float airControll = 0.3f;
 	public float walkFriction = 1.5f;
-	public int state = 0;
-	public float jumpLimit = 0;
-	public SpringJoint2D spring;
-	public Vector2 grapplePosition;
+
+	Vector2 grapplePosition;
+	bool grappleSet = false;
+
 	public float grappleTime = 30;
-	public float grappleTimer;
-	public bool grappleSet = false;
+	float grappleTimer;
+
 	public float maxGrappleLength = 1;
 	public float minGrappleLength = 20;
-	private AudioSource audioSource;
 
 	void Start ()
 	{
@@ -34,14 +42,14 @@ public class PlayerControll : MonoBehaviour
 		grapplePosition = transform.position;
 		spring.enabled = false;
 		audioSource = GetComponent<AudioSource> ();
+		anim = GetComponentInChildren<Animator>();
 	}
 
 	void Update ()
 	{
 		spring.distance += scroll;
-
-
-		RaycastHit2D groundScanner = Physics2D.Raycast (transform.position, -Vector2.up, 1.7f);
+	
+		RaycastHit2D groundScanner = Physics2D.Raycast (transform.position, -Vector2.up, 3f);
 		if (groundScanner.transform != null) {
 			if (!groundScanner.transform.CompareTag ("Checkpoint")) {
 				grounded = true;
@@ -54,6 +62,14 @@ public class PlayerControll : MonoBehaviour
 		
 		if (jump && grounded) {
 			jumping = true;
+		}
+
+		anim.SetBool("grounded",grounded);
+
+		if(horizontal != 0){
+			anim.SetTrigger("walk");
+		}else{
+			anim.SetTrigger("idle");
 		}
 
 		if (!grounded) {
@@ -148,21 +164,25 @@ public class PlayerControll : MonoBehaviour
 		if (rigidbody2D.velocity.magnitude < maxSpeed && grounded && horizontal != 0) {
 			rigidbody2D.AddForce (Vector2.right * horizontal * force * controll);
 		}
+
+		if(horizontal<0){
+			body.transform.localScale = new Vector3(-1,body.transform.localScale.y,body.transform.localScale.z);
+		}
+		if(horizontal>0){
+			body.transform.localScale = new Vector3(1,body.transform.localScale.y,body.transform.localScale.z);
+		}
+
 		// moving right
 		if (rigidbody2D.velocity.x <= 0) {
-
 			if (rigidbody2D.velocity.x < maxSpeed * controll && !grounded && horizontal != 0) {
 				rigidbody2D.AddForce (Vector2.right * horizontal * controll * force);
-				
 			}
 		}
 
 		// moving left
 		if (rigidbody2D.velocity.x >= 0) {
-
 			if (rigidbody2D.velocity.x > -maxSpeed * controll && !grounded && horizontal != 0) {
 				rigidbody2D.AddForce (Vector2.right * horizontal * controll * force);
-				
 			}
 		} 
 		

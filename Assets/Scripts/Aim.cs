@@ -40,6 +40,14 @@ public class Aim : MonoBehaviour
 			
 			//Rotates toward the mouse
 			transform.eulerAngles = new Vector3 (0, 0, Mathf.Atan2 ((mousePosition.y - transform.position.y), (mousePosition.x - transform.position.x)) * Mathf.Rad2Deg);
+
+			if (transform.eulerAngles.z > 90 && transform.eulerAngles.z < 270) {
+				transform.localScale = new Vector3(transform.localScale.x, -1 ,transform.localScale.z);
+			} else {
+				transform.localScale = new Vector3(transform.localScale.x, 1 ,transform.localScale.z);
+				
+			}
+
 			
 		} else {
 				

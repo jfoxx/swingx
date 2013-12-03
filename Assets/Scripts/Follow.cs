@@ -7,7 +7,7 @@ public class Follow : MonoBehaviour
 	public Transform target;
 	public GameObject finish;
 	Vector3 targetPosition;
-	float minDistance = 40;
+	float minDistance = 30;
 	float maxDistance = 80;
 	float distance;
 	float inspectFinishTimer = 0;

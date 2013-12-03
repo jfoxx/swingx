@@ -1,0 +1,126 @@
+fileFormatVersion: 2
+guid: 55ac947649c5f4b7398ad92aefb2bc59
+TextureImporter:
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 4096
+  textureSettings:
+    filterMode: -1
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Body_0
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 17
+        width: 115
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: Body_1
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 17
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: Body_2
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 18
+        width: 114
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: Body_3
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 17
+        width: 115
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: Body_4
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 16
+        width: 114
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: Body_5
+      rect:
+        serializedVersion: 2
+        x: 628
+        y: 17
+        width: 114
+        height: 145
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: Body_6
+      rect:
+        serializedVersion: 2
+        x: 750
+        y: 16
+        width: 114
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: Body_7
+      rect:
+        serializedVersion: 2
+        x: 873
+        y: 14
+        width: 114
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: Body_8
+      rect:
+        serializedVersion: 2
+        x: 1019
+        y: 17
+        width: 128
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+  spritePackingTag: 
+  userData: 
