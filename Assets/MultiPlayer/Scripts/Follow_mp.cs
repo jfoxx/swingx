@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Follow : MonoBehaviour
+public class Follow_mp : MonoBehaviour
 {
 
 	public Transform target;
@@ -19,6 +19,9 @@ public class Follow : MonoBehaviour
 	
 	void Start ()
 	{
+		if(!networkView.isMine){
+			gameObject.SetActive(false);
+		}
 		finish = GameObject.Find ("Finish");
 		if(finish != null){
 			targetPosition = finish.transform.position;
