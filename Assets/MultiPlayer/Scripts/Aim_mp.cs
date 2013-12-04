@@ -22,7 +22,7 @@ public class Aim_mp : MonoBehaviour
 
 	void Start ()
 	{
-		if(!networkView.isMine){return;}
+		if(!networkView.isMine){enabled = false;}
 
 		gameState = GameState.Instance;
 		transform.eulerAngles = new Vector3 (0, 0, 15f);

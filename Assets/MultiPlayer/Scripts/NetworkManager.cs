@@ -61,15 +61,8 @@ public class NetworkManager : MonoBehaviour
 		
 	}
 
-	private void spawnCamera ()
-	{
-		Debug.Log ("Spawn Camers");
-		Instantiate (CameraPrefab, Vector3.zero, Quaternion.identity);	
-	}
-	
 	void OnServerInitialized ()
 	{
-		
 		Debug.Log ("server init.");
 		MasterServer.RegisterHost (gameTypeName, "swingX_server_" + Random.Range (1000, 9999));
 		spawnPlayer ();

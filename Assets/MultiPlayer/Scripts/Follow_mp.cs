@@ -10,12 +10,11 @@ public class Follow_mp : MonoBehaviour
 	float minDistance = 30;
 	float maxDistance = 80;
 	float distance;
-	float inspectFinishTimer = 0;
-	float inspectFinishTime = 2;
-	float inspectMapTimer = 0;
-	float inspectMapTime = 2;
+	float overviewTimer = 0;
+	float overviewTime = 2;
+
 	bool zoomedIn = false;
-	Vector3 startPosition = new Vector3(0,0,-40);
+	Vector3 startPosition = new Vector3(0,0,-80);
 	
 	void Start ()
 	{
@@ -55,18 +54,21 @@ public class Follow_mp : MonoBehaviour
 	
 	void FixedUpdate ()
 	{
-		
-		
-		if (inspectFinishTimer < inspectFinishTime) {
-			inspectFinishTimer += Time.deltaTime;
+
+		if (overviewTimer < overviewTime) {
+			overviewTimer += Time.deltaTime;
 		}
 
 		if (target != null) {
-			if (inspectFinishTimer > inspectFinishTime) {
-				targetPosition = new Vector3 (target.transform.position.x, target.transform.position.y +10, -distance);
+			if (overviewTimer > overviewTime) {
+				if(!target.gameObject.activeInHierarchy || target.gameObject == null){
+					targetPosition = startPosition;
+				}else{
+					targetPosition = new Vector3 (target.transform.position.x, target.transform.position.y +10, -distance);
+				}
 			} else {
 				if(finish != null){
-					targetPosition = new Vector3 (finish.transform.position.x, finish.transform.position.y, -40);
+					targetPosition = startPosition;
 				}
 			}			
 		}

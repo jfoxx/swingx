@@ -40,11 +40,6 @@ public class GameManager_mp : MonoBehaviour
 			//gameState.setLevel("main");
 		}
 
-	}
-
-	void OnGUI()
-	{
-
-	}
+	}	
 }
 
