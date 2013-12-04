@@ -39,7 +39,7 @@ public class Aim_mp : MonoBehaviour
 					Input.mousePosition.x,
 					Input.mousePosition.y,
 					Input.mousePosition.z - Camera.main.transform.position.z
-			)
+				)
 			);
 			
 			//Rotates toward the mouse

@@ -23,7 +23,8 @@ public class GrappleLine : MonoBehaviour
 	{
 		if (grapple != null && player != null) {
 
-			distance = Vector2.Distance (grapple.transform.position, player.transform.position);
+			//distance = Vector2.Distance (grapple.transform.position, player.transform.position);
+
 			line.SetPosition (0, player.transform.position);
 			line.SetPosition (1, grapple.transform.position);
 

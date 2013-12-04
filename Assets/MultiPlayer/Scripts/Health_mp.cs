@@ -22,9 +22,9 @@ public class Health_mp : MonoBehaviour
 			health = 0;
 			die ();
 		}
-		
 	}
-	
+
+	[RPC]
 	void applyDamage (float damage)
 	{
 		Debug.Log ("damage taken: " + damage);

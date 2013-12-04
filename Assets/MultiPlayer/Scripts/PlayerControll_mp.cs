@@ -5,6 +5,7 @@ public class PlayerControll_mp : MonoBehaviour
 {
 	
 	public Transform aimTransform;
+	public Transform groundScannerTransform;
 	private AudioSource audioSource;
 	public SpringJoint2D spring;
 	
@@ -70,7 +71,7 @@ public class PlayerControll_mp : MonoBehaviour
 
 		spring.distance += scroll;
 	
-		RaycastHit2D groundScanner = Physics2D.Raycast (transform.position, -Vector2.up, 3f);
+		RaycastHit2D groundScanner = Physics2D.Raycast (groundScannerTransform.transform.position, -Vector2.up, 0.2f);
 
 		if (groundScanner.transform != null) {
 			grounded = !groundScanner.transform.CompareTag ("Checkpoint");
@@ -88,15 +89,17 @@ public class PlayerControll_mp : MonoBehaviour
 			controll = 1;
 		}
 
-		Debug.DrawRay (transform.position, -(transform.position - aimTransform.position), Color.green);
+		Debug.DrawRay (aimTransform.position, aimTransform.TransformDirection(Vector2.right), Color.green);
 
 		if (grappleStart) {
 
-			RaycastHit2D myhit = Physics2D.Raycast (transform.position, - (transform.position - aimTransform.position), 1000f);
+			RaycastHit2D myhit = Physics2D.Raycast (aimTransform.position, aimTransform.TransformDirection(Vector2.right), 100f);
+
+			Debug.Log(myhit.transform.name);
 
 			if (myhit != null && myhit.transform != null) {
 
-				if(myhit.transform.CompareTag("Grabable")){
+				//if(myhit.transform.CompareTag("Grabable")){
 
 					Debug.Log ("grabbed " + myhit.transform.name);
 					audioSource.PlayOneShot (grappleHit);
@@ -109,7 +112,7 @@ public class PlayerControll_mp : MonoBehaviour
 
 					grappleSet = true;
 					spring.enabled = true;
-				}
+				//}
 
 			} else {
 				audioSource.PlayOneShot (grappleMiss);
@@ -124,7 +127,6 @@ public class PlayerControll_mp : MonoBehaviour
 		if (!grappleSet) {
 			grapplePosition = transform.position;
 			spring.enabled = false;
-			spring.distance = 1;
 		}
 
 		if(!spring.connectedBody.gameObject.activeInHierarchy){
@@ -217,7 +219,4 @@ public class PlayerControll_mp : MonoBehaviour
 		}
 	}
 
-	void OnGUI(){
-
-	}
 }

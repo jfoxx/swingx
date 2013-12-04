@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-[RequireComponent(typeof(SoundEffects))]
+
 public class GameManager_mp : MonoBehaviour 
 {
+
 	public GameState gameState;
 
-	GameObject[] players;
 	public string currentLevel;
 
 	private static GameManager_mp instance;
@@ -27,19 +26,13 @@ public class GameManager_mp : MonoBehaviour
 
 	void Start ( ) 
 	{
+
 		gameState 		= GameState.Instance;
+
 		currentLevel 	= gameState.currentLevel;
-		players 			= GameObject.FindGameObjectsWithTag("Player");
 
 	}
-	
-	void Update ( ) 
-	{
 
-		if (players.Length <= 0) {
-			//gameState.setLevel("main");
-		}
-
-	}	
 }
+
 

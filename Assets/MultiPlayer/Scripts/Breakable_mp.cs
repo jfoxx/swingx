@@ -24,9 +24,14 @@ public class Breakable_mp : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D coll) {
 		if(coll.relativeVelocity.magnitude > 70){
 			Debug.Log(coll.relativeVelocity.magnitude);
-			audioSource.PlayOneShot(crackSound);
-			transform.SendMessage("applyDamage", coll.relativeVelocity.magnitude * 0.6f, SendMessageOptions.DontRequireReceiver);
+			networkView.RPC("OnCollision", RPCMode.All, coll.relativeVelocity.magnitude * 0.6f);
 		}
+	}
+
+	[RPC]
+	void OnCollision(float damage){
+		audioSource.PlayOneShot(crackSound);
+		networkView.RPC("applyDamage", RPCMode.AllBuffered , damage);
 	}
 
 	void OnDestroy()

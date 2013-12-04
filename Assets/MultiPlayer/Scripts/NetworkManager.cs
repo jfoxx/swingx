@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class NetworkManager : MonoBehaviour
 {
-	
+
+	public GameManager_mp gameManager;
 	public GameObject PlayerPrefab;
 	public GameObject CameraPrefab;
 	public string gameTypeName;
-	private int playerCount = 0;
 	bool isRefreshing = false;
 	float refreshRequestLength = 5f;
 	HostData[] hostData;
@@ -18,6 +18,7 @@ public class NetworkManager : MonoBehaviour
 		
 		gameTypeName = "swingX_" + Application.unityVersion + "_server";
 		Debug.Log (gameTypeName);
+		gameManager = GameManager_mp.Instance;
 		
 	}
 	
@@ -55,8 +56,7 @@ public class NetworkManager : MonoBehaviour
 	private void spawnPlayer ()
 	{
 		
-		Debug.Log ("Spawn player");
-		
+		Debug.Log ("Spawn player");		
 		Network.Instantiate (PlayerPrefab, Vector3.zero, Quaternion.identity, 0);
 		
 	}
@@ -66,7 +66,6 @@ public class NetworkManager : MonoBehaviour
 		Debug.Log ("server init.");
 		MasterServer.RegisterHost (gameTypeName, "swingX_server_" + Random.Range (1000, 9999));
 		spawnPlayer ();
-		
 	}
 	
 	void OnMasterServerEvent (MasterServerEvent masterServerEvent)
@@ -95,13 +94,13 @@ public class NetworkManager : MonoBehaviour
 		Network.DestroyPlayerObjects (player);
 		
 	}
-	
-	void OnPlayerConnected (NetworkPlayer player)
-	{
-		
-		Debug.Log ("Player " + playerCount + " connected from " + player.ipAddress + ":" + player.port);
-		
+
+	void OnDisconnectedFromServer(NetworkDisconnection info) {
+		Debug.Log("Disconnected from server: " + info);
+		Application.LoadLevel(GameState.Instance.currentLevel);
 	}
+	
+
 	
 	void OnApplicationQuit ()
 	{
