@@ -31,6 +31,8 @@ public class GameManager_mp : MonoBehaviour
 
 		currentLevel 	= gameState.currentLevel;
 
+		instance = this;
+
 	}
 
 }

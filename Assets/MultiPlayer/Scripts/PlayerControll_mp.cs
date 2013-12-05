@@ -49,7 +49,7 @@ public class PlayerControll_mp : MonoBehaviour
 		
 
 		if(!networkView.isMine){
-//			rigidbody2D.Sleep();
+			rigidbody2D.Sleep();
 //			rigidbody2D.isKinematic = true;
 			return;
 		}
@@ -61,8 +61,6 @@ public class PlayerControll_mp : MonoBehaviour
 
 		grapplePosition = transform.position;
 		audioSource = GetComponent<AudioSource> ();
-
-		networkManager = GameObject.Find("Manager").GetComponent<NetworkManager>();
 
 		Transform grapplePointObject = Instantiate(grapplePointPrefab, transform.position, Quaternion.identity) as Transform;
 
@@ -256,7 +254,9 @@ public class PlayerControll_mp : MonoBehaviour
 
 	void OnDestroy()
 	{
-		networkManager.playerDied();
+		if(networkView.isMine){
+			NetworkManager.Instance.playerDied();
+		}
 	}
 	
 }

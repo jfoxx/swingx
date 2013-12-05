@@ -7,8 +7,8 @@ public class Follow_mp : MonoBehaviour
 	public Transform target;
 	public GameObject finish;
 	Vector3 targetPosition;
-	float minDistance = 40;
-	float maxDistance = 80;
+	float minDistance = 60;
+	float maxDistance = 90;
 	float distance;
 	float overviewTimer = 0;
 	float overviewTime = 2;

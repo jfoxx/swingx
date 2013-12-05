@@ -8,6 +8,7 @@ public class NetworkManager : MonoBehaviour
 	public GameManager_mp gameManager;
 	public GameObject PlayerPrefab;
 	public GameObject CameraPrefab;
+	public GameObject MapPrefab;
 
 	GameObject cameraObject;
 	GameObject playerObject;
@@ -23,6 +24,7 @@ public class NetworkManager : MonoBehaviour
 	float refreshRequestLength = 5f;
 	HostData[] hostData;
 
+	public static NetworkManager Instance;
 
 	void Start ()
 	{
@@ -31,7 +33,7 @@ public class NetworkManager : MonoBehaviour
 		gameManager = GetComponent<GameManager_mp>();
 		isAlive = false;
 		gameHasStarted = false;
-		
+		Instance = this;
 	}
 	
 	public IEnumerator RefreshHostList ()
@@ -65,14 +67,22 @@ public class NetworkManager : MonoBehaviour
 		
 	}
 	
+	private void spawnMap ()
+	{
+		
+		Debug.Log ("Spawn Map");		
+		Network.Instantiate (MapPrefab, Vector3.zero, Quaternion.identity, 0);
+	
+	}
+
 	private void spawnPlayer ()
 	{
 		
 		Debug.Log ("Spawn player");		
 		playerObject = Network.Instantiate (PlayerPrefab, Vector3.zero, Quaternion.identity, 0) as GameObject;
-
+		
 		cameraObject.gameObject.GetComponent<Follow_mp>().target = playerObject.transform;
-
+		
 		isAlive = true;
 	}
 
@@ -94,6 +104,7 @@ public class NetworkManager : MonoBehaviour
 	{
 		Debug.Log ("server init.");
 		MasterServer.RegisterHost (gameTypeName, "swingX_server_" + Random.Range (1000, 9999));
+		spawnMap();
 		gameHasStarted = true;
 	}
 
@@ -169,8 +180,9 @@ public class NetworkManager : MonoBehaviour
 				if(!cameraSpawned){
 					spawnCamera ();
 				}
-				spawnPlayer();
-
+				if(Network.isClient){
+					spawnPlayer();
+				}
 
 			}
 			return;

@@ -27,6 +27,7 @@ public class PlayerManager_mp : MonoBehaviour {
 
 	void Start ( ) 
 	{
+		instance = this;
 		gameState = GameState.Instance;
 		players = new List<Player>();
 	}
