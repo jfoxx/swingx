@@ -7,7 +7,7 @@ public class Follow_mp : MonoBehaviour
 	public Transform target;
 	public GameObject finish;
 	Vector3 targetPosition;
-	float minDistance = 30;
+	float minDistance = 40;
 	float maxDistance = 80;
 	float distance;
 	float overviewTimer = 0;
@@ -21,14 +21,9 @@ public class Follow_mp : MonoBehaviour
 		if(!networkView.isMine){
 			gameObject.SetActive(false);
 		}
-		finish = GameObject.Find ("Finish");
-		if(finish != null){
-			targetPosition = finish.transform.position;
-		}
-		else
-		{
-			targetPosition = startPosition;
-		}
+
+		targetPosition = startPosition;
+
 		distance = maxDistance;
 	}
 	
@@ -61,20 +56,16 @@ public class Follow_mp : MonoBehaviour
 
 		if (target != null) {
 			if (overviewTimer > overviewTime) {
-				if(!target.gameObject.activeInHierarchy || target.gameObject == null){
+				if(target.gameObject == null){
 					targetPosition = startPosition;
 				}else{
 					targetPosition = new Vector3 (target.transform.position.x, target.transform.position.y +10, -distance);
 				}
-			} else {
-				if(finish != null){
-					targetPosition = startPosition;
-				}
-			}			
+			}		
 		}
 
 		if (targetPosition != transform.position) {
-			transform.position = Vector3.Lerp (transform.position, targetPosition, 0.1f);
+			transform.position = Vector3.Lerp (transform.position, targetPosition, 0.3f);
 		}
 
 	}

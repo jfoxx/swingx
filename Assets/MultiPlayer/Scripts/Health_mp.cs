@@ -30,7 +30,7 @@ public class Health_mp : MonoBehaviour
 		Debug.Log ("damage taken: " + damage);
 		health -= damage;
 	}
-	
+
 	void onKillZone ()
 	{
 		health = 0;
@@ -42,7 +42,6 @@ public class Health_mp : MonoBehaviour
 		if(explosionPrefab != null){
 			Network.Instantiate(explosionPrefab, transform.position, Quaternion.identity,0);
 		}
-		gameObject.SetActive(false);
 
 		Network.Destroy(gameObject);
 	}
@@ -50,5 +49,10 @@ public class Health_mp : MonoBehaviour
 	void OnDestroy ()
 	{
 		Debug.Log ("i was destroyed");        
+	}
+
+	void OnGUI(){
+		if(!networkView.isMine){return;}
+		GUI.Label(new Rect(Screen.width-100, Screen.height - 30, 100, 30), "healt: " + health);
 	}
 }

@@ -6,6 +6,12 @@ public class PlayerControll_mp : MonoBehaviour
 	
 	public Transform aimTransform;
 	public Transform groundScannerTransform;
+
+	public Transform grapplePointPrefab;
+	public Transform grappleLinePrefab;
+
+	public Transform grappleLineObject;
+
 	private AudioSource audioSource;
 	public SpringJoint2D spring;
 	
@@ -35,39 +41,61 @@ public class PlayerControll_mp : MonoBehaviour
 	public float maxGrappleLength = 1;
 	public float minGrappleLength = 20;
 
+	NetworkManager networkManager; 
+
 	void Start ()
 	{
+		
+		
+
+		if(!networkView.isMine){
+//			rigidbody2D.Sleep();
+//			rigidbody2D.isKinematic = true;
+			return;
+		}
+
+//		Transform grappleLineObject = Network.Instantiate(grappleLinePrefab, transform.position, Quaternion.identity, 0) as Transform;
+
 		spring = GetComponent<SpringJoint2D> ();
-		grapplePosition = transform.position;
 		spring.enabled = false;
+
+		grapplePosition = transform.position;
 		audioSource = GetComponent<AudioSource> ();
+
+		networkManager = GameObject.Find("Manager").GetComponent<NetworkManager>();
+
+		Transform grapplePointObject = Instantiate(grapplePointPrefab, transform.position, Quaternion.identity) as Transform;
+
+		spring.connectedBody = grapplePointObject.rigidbody2D;
 		spring.connectedBody.transform.parent = transform;
 
-		if(!networkView.isMine){enabled = false;}
-		if(!networkView.isMine){return;}
+		grappleLineObject = transform.FindChild("GrappleLine_mp");
+		grappleLineObject.GetComponent<GrappleLine>().grapple = grapplePointObject.transform;
+//		grappleLineObject.gameObject.GetComponent<GrappleLine>().grapple = grapplePointObject.transform;
+//		grappleLineObject.transform.parent = transform;
 
-//		if(!networkView.isMine){
-//			if(!networkView.isMine){enabled = false;}
-//
-//		}
+		
+
 	}
 
 	void OnCollisionStay2D (Collision2D coll)
 	{
-		if(!networkView.isMine){return;}
 
-		if(coll.transform.CompareTag("Player")){
-			if(coll.relativeVelocity.magnitude > 50 && coll.transform.rigidbody2D.velocity.magnitude > transform.rigidbody2D.velocity.magnitude){
-				Debug.Log("velocity : " + coll.relativeVelocity.magnitude * 0.3f);
-				coll.transform.SendMessage ("applyDamage",coll.relativeVelocity.magnitude);
-			}
-		}
 	}
 
 	void Update ()
 	{
 
 		if(!networkView.isMine){return;}
+
+		if(spring.connectedBody == null)
+		{
+			Transform grapplePointObject = Instantiate(grapplePointPrefab, transform.position, Quaternion.identity) as Transform;
+			spring.connectedBody = grapplePointObject.rigidbody2D;
+			spring.connectedBody.transform.parent = transform;
+			grappleLineObject.GetComponent<GrappleLine>().grapple = grapplePointObject;
+			grappleSet = false;
+		}
 
 		spring.distance += scroll;
 	
@@ -93,11 +121,11 @@ public class PlayerControll_mp : MonoBehaviour
 
 		if (grappleStart) {
 
-			RaycastHit2D myhit = Physics2D.Raycast (aimTransform.position, aimTransform.TransformDirection(Vector2.right), 100f);
+			RaycastHit2D myhit = Physics2D.Raycast (aimTransform.position, aimTransform.TransformDirection(Vector2.right), 1000f);
 
-			Debug.Log(myhit.transform.name);
 
 			if (myhit != null && myhit.transform != null) {
+				Debug.Log(myhit.transform.name);
 
 				//if(myhit.transform.CompareTag("Grabable")){
 
@@ -126,17 +154,10 @@ public class PlayerControll_mp : MonoBehaviour
 
 		if (!grappleSet) {
 			grapplePosition = transform.position;
+			spring.connectedBody.transform.position = grapplePosition;
 			spring.enabled = false;
 		}
 
-		if(!spring.connectedBody.gameObject.activeInHierarchy){
-			spring.connectedBody.transform.parent = transform;
-			spring.connectedBody.gameObject.SetActive(true);
-			grappleSet = false;
-
-		}
-
-		spring.connectedBody.transform.position = grapplePosition;
 	}
 	
 	public virtual float scroll {
@@ -217,6 +238,25 @@ public class PlayerControll_mp : MonoBehaviour
 		if (coll.relativeVelocity.magnitude > 20) {
 			audioSource.PlayOneShot (bumpSound);
 		}
+
+		if(networkView.isMine)
+		{
+			if(coll.transform.rigidbody2D == null){return;}
+			Debug.Log("Collision !" );
+
+			if(coll.relativeVelocity.magnitude > 30 && coll.transform.rigidbody2D.velocity.magnitude > transform.rigidbody2D.velocity.magnitude){
+				
+				Debug.Log("velocity : " + coll.relativeVelocity.magnitude);
+
+				coll.transform.networkView.RPC("applyDamage", RPCMode.All ,coll.relativeVelocity.magnitude * 0.3f);
+			}
+		}
+
 	}
 
+	void OnDestroy()
+	{
+		networkManager.playerDied();
+	}
+	
 }

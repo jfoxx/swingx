@@ -8,17 +8,29 @@ public class NetworkManager : MonoBehaviour
 	public GameManager_mp gameManager;
 	public GameObject PlayerPrefab;
 	public GameObject CameraPrefab;
+
+	GameObject cameraObject;
+	GameObject playerObject;
+	
 	public string gameTypeName;
-	bool isRefreshing = false;
+
+	public bool isRefreshing = false;
+	public bool isAlive = false;
+	public bool gameHasStarted = false;
+	public bool cameraSpawned = false;
+
+
 	float refreshRequestLength = 5f;
 	HostData[] hostData;
-	
+
+
 	void Start ()
 	{
-		
 		gameTypeName = "swingX_" + Application.unityVersion + "_server";
 		Debug.Log (gameTypeName);
-		gameManager = GameManager_mp.Instance;
+		gameManager = GetComponent<GameManager_mp>();
+		isAlive = false;
+		gameHasStarted = false;
 		
 	}
 	
@@ -57,17 +69,39 @@ public class NetworkManager : MonoBehaviour
 	{
 		
 		Debug.Log ("Spawn player");		
-		Network.Instantiate (PlayerPrefab, Vector3.zero, Quaternion.identity, 0);
-		
+		playerObject = Network.Instantiate (PlayerPrefab, Vector3.zero, Quaternion.identity, 0) as GameObject;
+
+		cameraObject.gameObject.GetComponent<Follow_mp>().target = playerObject.transform;
+
+		isAlive = true;
+	}
+
+	private void spawnCamera ()
+	{
+		Debug.Log ("Spawn Camera");		
+		cameraObject = Network.Instantiate (CameraPrefab, Vector3.zero, Quaternion.identity, 0) as GameObject;
+		Debug.Log(cameraObject);
+		cameraSpawned = true;
+
+	}
+
+	public void playerDied(){
+		Debug.Log("playerDied was run!");
+		isAlive = false;
 	}
 
 	void OnServerInitialized ()
 	{
 		Debug.Log ("server init.");
 		MasterServer.RegisterHost (gameTypeName, "swingX_server_" + Random.Range (1000, 9999));
-		spawnPlayer ();
+		gameHasStarted = true;
 	}
-	
+
+	void OnConnectedToServer()
+	{
+		gameHasStarted = true;
+	}
+
 	void OnMasterServerEvent (MasterServerEvent masterServerEvent)
 	{
 		
@@ -97,9 +131,10 @@ public class NetworkManager : MonoBehaviour
 
 	void OnDisconnectedFromServer(NetworkDisconnection info) {
 		Debug.Log("Disconnected from server: " + info);
-		Application.LoadLevel(GameState.Instance.currentLevel);
+		if(Network.isClient){
+			Application.LoadLevel(GameState.Instance.currentLevel);
+		}
 	}
-	
 
 	
 	void OnApplicationQuit ()
@@ -118,12 +153,30 @@ public class NetworkManager : MonoBehaviour
 	
 	void OnGUI ()
 	{		
-		
-		if (Network.isClient) {
-			Debug.Log ("im a client");
-			if (GUILayout.Button ("Spawn")) {
-				spawnPlayer ();
+		if(!isAlive && gameHasStarted){
+			Debug.Log("now its false");
+		}
+
+		if (!isAlive && gameHasStarted) 
+		{
+			float respawnButtonHeight = 150;
+			float respawnButtonWidth = Screen.width/ 2;
+			float respawnButtonLeft = Screen.width/2 -respawnButtonWidth/2;
+			float respawnButtonTop = Screen.height / 2 - respawnButtonHeight/2;
+
+			if(GUI.Button(new Rect (respawnButtonLeft, respawnButtonTop, respawnButtonWidth, respawnButtonHeight), "Spawn"))
+			{
+				if(!cameraSpawned){
+					spawnCamera ();
+				}
+				spawnPlayer();
+
+
 			}
+			return;
+		}
+
+		if(isAlive || gameHasStarted){
 			return;
 		}
 		
