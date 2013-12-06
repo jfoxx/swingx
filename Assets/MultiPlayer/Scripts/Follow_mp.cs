@@ -13,7 +13,7 @@ public class Follow_mp : MonoBehaviour
 	float overviewTimer = 0;
 	float overviewTime = 2;
 
-	bool zoomedIn = false;
+	bool zoomedIn = true;
 	Vector3 startPosition = new Vector3(0,0,-110);
 	
 	void Start ()

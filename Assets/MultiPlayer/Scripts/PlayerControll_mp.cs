@@ -45,9 +45,6 @@ public class PlayerControll_mp : MonoBehaviour
 
 	void Start ()
 	{
-		
-		
-
 		if(!networkView.isMine){
 			rigidbody2D.Sleep();
 			rigidbody2D.isKinematic = true;
@@ -231,26 +228,26 @@ public class PlayerControll_mp : MonoBehaviour
 		
 	}
 
-	void OnCollisionEnter2D (Collision2D coll)
-	{
-		if (coll.relativeVelocity.magnitude > 20) {
-			audioSource.PlayOneShot (bumpSound);
-		}
-
-		if(networkView.isMine)
-		{
-			if(coll.transform.rigidbody2D == null){return;}
-			Debug.Log("Collision !" );
-
-			if(coll.relativeVelocity.magnitude > 30 && coll.transform.rigidbody2D.velocity.magnitude > transform.rigidbody2D.velocity.magnitude){
-				
-				Debug.Log("velocity : " + coll.relativeVelocity.magnitude);
-
-				coll.transform.networkView.RPC("applyDamage", RPCMode.All ,coll.relativeVelocity.magnitude * 0.3f);
-			}
-		}
-
-	}
+//	void OnCollisionEnter2D (Collision2D coll)
+//	{
+//		if (coll.relativeVelocity.magnitude > 20) {
+//			audioSource.PlayOneShot (bumpSound);
+//		}
+//
+//		if(networkView.isMine)
+//		{
+//			if(coll.transform.rigidbody2D == null){return;}
+//			Debug.Log("Collision !" );
+//
+//			if(coll.relativeVelocity.magnitude > 30 && coll.transform.rigidbody2D.velocity.magnitude > transform.rigidbody2D.velocity.magnitude){
+//				
+//				Debug.Log("velocity : " + coll.relativeVelocity.magnitude);
+//
+//				coll.transform.networkView.RPC("applyDamage", RPCMode.All ,coll.relativeVelocity.magnitude * 0.3f);
+//			}
+//		}
+//
+//	}
 
 	void OnDestroy()
 	{

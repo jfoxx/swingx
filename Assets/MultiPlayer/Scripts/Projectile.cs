@@ -10,13 +10,23 @@ public class Projectile : MonoBehaviour {
 
 	private bool isShot = false;
 
+	public virtual bool detonate {
+		get {
+			return Input.GetButtonUp ("Fire1");
+		} 
+	}
+
 	void Start () {
 		rigidbody2D.velocity = transform.TransformDirection(Vector2.right * startSpeed);
 		audioSource = GetComponent<AudioSource>();
 	}
 
 	void Update () {
-
+		if(networkView.isMine){
+			if(detonate){
+				Network.Destroy(gameObject);
+			}
+		}
 	}
 
 	void OnDestroy(){
