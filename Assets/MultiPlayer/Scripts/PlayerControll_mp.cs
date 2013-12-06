@@ -30,7 +30,7 @@ public class PlayerControll_mp : MonoBehaviour
 
 	public float controll;
 	public float airControll = 0.3f;
-	public float walkFriction = 1.5f;
+	public float walkFriction = 1.3f;
 
 	Vector2 grapplePosition;
 	bool grappleSet = false;
@@ -50,7 +50,7 @@ public class PlayerControll_mp : MonoBehaviour
 
 		if(!networkView.isMine){
 			rigidbody2D.Sleep();
-//			rigidbody2D.isKinematic = true;
+			rigidbody2D.isKinematic = true;
 			return;
 		}
 
@@ -125,7 +125,7 @@ public class PlayerControll_mp : MonoBehaviour
 			if (myhit != null && myhit.transform != null) {
 				Debug.Log(myhit.transform.name);
 
-				//if(myhit.transform.CompareTag("Grabable")){
+				if(myhit.transform.CompareTag("Grabable")){
 
 					Debug.Log ("grabbed " + myhit.transform.name);
 					audioSource.PlayOneShot (grappleHit);
@@ -138,7 +138,7 @@ public class PlayerControll_mp : MonoBehaviour
 
 					grappleSet = true;
 					spring.enabled = true;
-				//}
+				}
 
 			} else {
 				audioSource.PlayOneShot (grappleMiss);
@@ -178,19 +178,19 @@ public class PlayerControll_mp : MonoBehaviour
 	
 	public virtual bool grappleStart {
 		get {
-			return Input.GetButtonDown ("Fire1");
+			return Input.GetButtonDown ("Fire2");
 		} 
 	}
 	
 	public virtual bool grappleStay {
 		get {
-			return Input.GetButton ("Fire1");
+			return Input.GetButton ("Fire2");
 		} 
 	}
 	
 	public virtual bool grappleExit {
 		get {
-			return Input.GetButtonUp ("Fire1");
+			return Input.GetButtonUp ("Fire2");
 		} 
 	}
 	

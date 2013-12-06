@@ -180,9 +180,8 @@ public class NetworkManager : MonoBehaviour
 				if(!cameraSpawned){
 					spawnCamera ();
 				}
-				if(Network.isClient){
-					spawnPlayer();
-				}
+
+				spawnPlayer();
 
 			}
 			return;

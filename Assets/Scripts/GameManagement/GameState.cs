@@ -7,7 +7,7 @@ public class GameState : MonoBehaviour
 	
 	public string currentLevel;
 	public bool showMenu;
-	public bool mouseAim = false;
+	public bool mouseAim = true;
 	private static GameState instance;
 
 	public static GameState Instance {

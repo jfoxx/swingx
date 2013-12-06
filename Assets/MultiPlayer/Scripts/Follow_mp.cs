@@ -7,14 +7,14 @@ public class Follow_mp : MonoBehaviour
 	public Transform target;
 	public GameObject finish;
 	Vector3 targetPosition;
-	float minDistance = 60;
-	float maxDistance = 90;
+	float minDistance = 70;
+	float maxDistance = 120;
 	float distance;
 	float overviewTimer = 0;
 	float overviewTime = 2;
 
 	bool zoomedIn = false;
-	Vector3 startPosition = new Vector3(0,0,-80);
+	Vector3 startPosition = new Vector3(0,0,-110);
 	
 	void Start ()
 	{
@@ -40,10 +40,12 @@ public class Follow_mp : MonoBehaviour
 		}
 
 		if(zoomedIn){
-			distance = Mathf.Lerp (distance, maxDistance, 0.4f);
+			distance = Mathf.Lerp (distance, maxDistance, 0.2f);
 		} else {
-			distance = Mathf.Lerp (distance, minDistance, 0.4f);
+			distance = Mathf.Lerp (distance, minDistance, 0.2f);
 		}
+
+		//distance = Mathf.Lerp (distance, Mathf.Clamp(target.rigidbody2D.velocity.magnitude * 1.3f, minDistance, maxDistance), 0.01f);;
 
 	}
 	
@@ -59,7 +61,7 @@ public class Follow_mp : MonoBehaviour
 				if(target.gameObject == null){
 					targetPosition = startPosition;
 				}else{
-					targetPosition = new Vector3 (target.transform.position.x, target.transform.position.y +10, -distance);
+					targetPosition = new Vector3 (target.transform.position.x, target.transform.position.y +20, -distance);
 				}
 			}		
 		}
