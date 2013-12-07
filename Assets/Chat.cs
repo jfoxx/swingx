@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 public class Chat : MonoBehaviour {
 
+	public GUISkin skin;
+
 	public static bool usingChat;
 	public bool showChat;
 
@@ -16,6 +18,7 @@ public class Chat : MonoBehaviour {
 	private float left;
 	private float height;
 	private float width;
+
 
 	bool enterPressed = false;
 
@@ -73,9 +76,11 @@ public class Chat : MonoBehaviour {
 	
 	void OnGUI ()
 	{
+		GUI.skin = skin;
+
 		height	= Screen.height / 2;
 		width = 300;
-		top = Screen.height - height - 30;
+		top = Screen.height - height - 50;
 		left = 20;
 
 		chatAreaRect = new Rect(left, top, width, height);
@@ -87,7 +92,7 @@ public class Chat : MonoBehaviour {
 		foreach(ChatMessage mess in _messages)
 		{
 			GUILayout.Space(5);
-			GUILayout.Label("[" + mess.name + "]: " + mess.text);
+			GUILayout.Label("[" + mess.name + "]:  " + mess.text);
 		}
 
 		GUILayout.EndArea();
