@@ -25,6 +25,7 @@ public class Follow_mp : MonoBehaviour
 		targetPosition = startPosition;
 
 		distance = maxDistance;
+	
 	}
 	
 	public virtual bool zoom {

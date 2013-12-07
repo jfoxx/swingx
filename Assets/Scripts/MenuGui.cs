@@ -12,6 +12,9 @@ public class MenuGui : MonoBehaviour
 	private float width;
 	private Rect menuWindowRect;
 
+	public GUISkin skin;
+
+
 	void Start ()
 	{
 		state = GameState.Instance;
@@ -29,6 +32,7 @@ public class MenuGui : MonoBehaviour
 
 	void OnGUI ()
 	{
+		GUI.skin = skin;
 		if (!state.showMenu) {
 			return;
 		}
@@ -44,9 +48,6 @@ public class MenuGui : MonoBehaviour
 			Application.LoadLevel ("main");
 		}
 
-		GUILayout.Space (10);
-
-		state.mouseAim = GUILayout.Toggle (state.mouseAim, "use mouse to aim");
 
 		GUILayout.Space (10);
 
@@ -59,7 +60,17 @@ public class MenuGui : MonoBehaviour
 				state.pause ();
 			}
 		}
+
+		GUILayout.Space (10);
+		
+		state.mouseAim = GUILayout.Toggle (state.mouseAim, "use mouse to aim");
+
 		GUILayout.FlexibleSpace ();
-	
+
+		if(!Application.isEditor && !Application.isWebPlayer){
+			if(GUILayout.Button("Quit")){
+				Application.Quit();
+			}
+		}
 	}
 }

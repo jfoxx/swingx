@@ -66,7 +66,6 @@ public class Chat : MonoBehaviour {
 
 			toggleChat();
 		}
-		Debug.Log(_message);
 	}
 
 	void toggleChat(){

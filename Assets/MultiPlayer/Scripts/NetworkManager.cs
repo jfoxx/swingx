@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 public class NetworkManager : MonoBehaviour
 {
+	public GUISkin skin;
 
 	public GameManager_mp gameManager;
+
 	public GameObject PlayerPrefab;
 	public GameObject CameraPrefab;
 	public GameObject MapPrefab;
@@ -19,6 +21,9 @@ public class NetworkManager : MonoBehaviour
 	public bool isAlive = false;
 	public bool gameHasStarted = false;
 	public bool cameraSpawned = false;
+
+	Rect serverWindowRect;
+	Rect menuWindowRect;
 
 	string playerName;
 
@@ -39,6 +44,7 @@ public class NetworkManager : MonoBehaviour
 		isAlive = false;
 		gameHasStarted = false;
 		Instance = this;
+		StartCoroutine ("RefreshHostList");
 	}
 	
 	public IEnumerator RefreshHostList ()
@@ -50,10 +56,12 @@ public class NetworkManager : MonoBehaviour
 		float timeEnd = Time.time + refreshRequestLength;
 		
 		while (Time.time < timeEnd) {
+			isRefreshing = true;
 			hostData = MasterServer.PollHostList ();
 			yield return new WaitForEndOfFrame ();
+
 		}
-		
+		isRefreshing = false;
 		if (hostData == null || hostData.Length == 0) {
 			Debug.Log ("No active servers found.");
 		} else {
@@ -95,7 +103,6 @@ public class NetworkManager : MonoBehaviour
 	{
 		Debug.Log ("Spawn Camera");		
 		cameraObject = Network.Instantiate (CameraPrefab, Vector3.zero, Quaternion.identity, 0) as GameObject;
-		Debug.Log(cameraObject);
 		cameraSpawned = true;
 
 	}
@@ -122,11 +129,11 @@ public class NetworkManager : MonoBehaviour
 	{
 		
 		if (masterServerEvent == MasterServerEvent.RegistrationSucceeded) {
-			Debug.Log ("RegistrationSucceeded");
+			Debug.Log ("Registration Succeeded");
 		}
 		
 		if (masterServerEvent == MasterServerEvent.HostListReceived) {
-			//Debug.Log ("HostListReceived" );
+			Debug.Log ("HostListReceived" );
 		}
 		
 	}
@@ -169,6 +176,8 @@ public class NetworkManager : MonoBehaviour
 	
 	void OnGUI ()
 	{		
+		GUI.skin = skin;
+
 		if (!isAlive && gameHasStarted) 
 		{
 			float respawnButtonHeight = 150;
@@ -178,7 +187,8 @@ public class NetworkManager : MonoBehaviour
 
 			if(GUI.Button(new Rect (respawnButtonLeft, respawnButtonTop, respawnButtonWidth, respawnButtonHeight), "Spawn"))
 			{
-				if(!cameraSpawned){
+				if(!cameraSpawned)
+				{
 					spawnCamera ();
 				}
 
@@ -188,54 +198,73 @@ public class NetworkManager : MonoBehaviour
 			return;
 		}
 
-		if(isAlive || gameHasStarted){
+		if(isAlive || gameHasStarted)
+		{
 			return;
 		}
 		
-		if (Network.isServer) {
-			
-			GUILayout.Label ("im a server");
-			return;
-		} 
-		
 		float height = Screen.height - 200;
-		float width = 150;
-		float left = Screen.width / 2 - width;
+		float width = 300;
+		float left = 10;
 		float top = Screen.height / 2 - height / 2;
 		
-		GUILayout.BeginArea (new Rect (left, top, width, height));	
+		menuWindowRect = new Rect (left, top, width, height);
 
-		GUILayout.Space (5);
-		
+		menuWindowRect = GUI.Window (3, menuWindowRect, menuWindowFunction, "Menu");
+	}
+
+	void menuWindowFunction (int windowID){
+
+		GUILayout.BeginHorizontal();
+
+		GUILayout.Label("Player name: ");
+
 		playerName = GUILayout.TextField (playerName);
 
+		GUILayout.EndHorizontal();
+		
 		GUILayout.Space (5);
-
-		if (GUILayout.Button ("Start new Server")) {
+		
+		if (GUILayout.Button ("Start new Server")) 
+		{
 			startServer ();
+
 			PlayerPrefs.SetString("playerName", playerName);
 		}
 		
 		GUILayout.Space (5);
 		
-		if (GUILayout.Button ("Refresh Server List")) {
+		if (GUILayout.Button ("Refresh Server List")) 
+		{
 			StartCoroutine ("RefreshHostList");
 		}
 		
 		GUILayout.Space (5);
-		
+
+		if(isRefreshing){
+			GUILayout.Label("Refreshing...");
+		}
 		if (hostData != null) {
-			
-			foreach (HostData host in hostData) {
+			if(hostData.Length != 0){
+
+				GUILayout.Label("Servers");
 				
-				if (GUILayout.Button (host.gameName)) {
-					Network.Connect (host);
-					PlayerPrefs.SetString("playerName", playerName);
+				foreach (HostData host in hostData) {
+					GUILayout.BeginHorizontal();
+					GUILayout.Label(host.gameName);
+					
+					if (GUILayout.Button ("join")) 
+					{
+						Network.Connect (host);
+						PlayerPrefs.SetString("playerName", playerName);
+					}
+					
+					GUILayout.EndHorizontal();
 				}
 			}
+		} 
+		if(!isRefreshing && hostData.Length == 0){
+			GUILayout.Label("No active servers. Try refreshing again later.");
 		}
-		
-		GUILayout.EndArea ();
 	}
-	
 }
