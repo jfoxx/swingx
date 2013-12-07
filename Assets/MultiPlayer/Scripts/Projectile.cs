@@ -17,32 +17,40 @@ public class Projectile : MonoBehaviour {
 	}
 
 	void Start () {
-		rigidbody2D.velocity = transform.TransformDirection(Vector2.right * startSpeed);
 		audioSource = GetComponent<AudioSource>();
+		rigidbody2D.velocity = transform.TransformDirection(Vector2.right * startSpeed);
+		if(!networkView.isMine){return;}
 	}
 
 	void Update () {
 		if(networkView.isMine){
 			if(detonate){
-				Network.Destroy(gameObject);
+				//Network.Destroy(gameObject);
 			}
 		}
 	}
 
 	void OnDestroy(){
 		Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+		if(networkView.isMine){
+			Network.RemoveRPCs(networkView.viewID);
+		}
 	}
 
 	void OnCollisionEnter2D (Collision2D coll)
 	{
-		Debug.Log("Collision!!!!!!!!!!");
-		if(coll.transform.CompareTag("Player")){
-			Network.Destroy(gameObject);
-		}
-
 		if (coll.relativeVelocity.magnitude > 20) {
 			audioSource.PlayOneShot (bumpSound);
 		}
 
+		if(networkView.isMine){
+
+			if(coll.transform.networkView != null){
+
+				if(!coll.transform.networkView.isMine && coll.transform.CompareTag("Player")){
+					Network.Destroy(gameObject);
+				}
+			}
+		}
 	}
 }

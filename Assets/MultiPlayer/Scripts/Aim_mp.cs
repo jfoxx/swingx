@@ -75,7 +75,13 @@ public class Aim_mp : MonoBehaviour
 					transform.eulerAngles = new Vector3 (0, 0, transform.localEulerAngles.z);
 				} 
 			}
-		
 		}
 	}
+
+	void OnDestroy(){
+		if(networkView.isMine){
+			Network.RemoveRPCs(networkView.viewID);
+		}
+	}
+
 }

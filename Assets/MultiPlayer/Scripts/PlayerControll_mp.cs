@@ -64,8 +64,11 @@ public class PlayerControll_mp : MonoBehaviour
 		spring.connectedBody = grapplePointObject.rigidbody2D;
 		spring.connectedBody.transform.parent = transform;
 
-		grappleLineObject = transform.FindChild("GrappleLine_mp");
-		grappleLineObject.GetComponent<GrappleLine>().grapple = grapplePointObject.transform;
+		//grappleLineObject = transform.FindChild("GrappleLine_mp");
+		//grappleLineObject.GetComponent<GrappleLine>().grapple = grapplePointObject.transform;
+
+		grappleLineObject = transform.FindChild("Lightning Emitter");
+		grappleLineObject.GetComponent<LightningBolt>().target = grapplePointObject.transform;
 //		grappleLineObject.gameObject.GetComponent<GrappleLine>().grapple = grapplePointObject.transform;
 //		grappleLineObject.transform.parent = transform;
 
@@ -120,7 +123,7 @@ public class PlayerControll_mp : MonoBehaviour
 
 
 			if (myhit != null && myhit.transform != null) {
-				Debug.Log(myhit.transform.name);
+
 
 				if(myhit.transform.CompareTag("Grabable")){
 
@@ -221,7 +224,7 @@ public class PlayerControll_mp : MonoBehaviour
 		if (jumping && grounded) {
 			//audio.clip = jumpSound;
 			//audio.Play();
-			rigidbody2D.velocity = rigidbody2D.velocity + (Vector2.up * jumpForce);
+			rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, rigidbody2D.velocity.y  + jumpForce);
 			jumping = false;
 			
 		}
@@ -254,6 +257,11 @@ public class PlayerControll_mp : MonoBehaviour
 		if(networkView.isMine){
 			NetworkManager.Instance.playerDied();
 		}
+	}
+
+	[RPC]
+	string getName(){
+		return PlayerPrefs.GetString("playerName");
 	}
 	
 }

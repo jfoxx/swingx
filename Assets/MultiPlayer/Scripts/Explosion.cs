@@ -22,8 +22,6 @@ public class Explosion : MonoBehaviour {
 					
 						Vector2 force = coll.transform.TransformDirection(transform.position);
 
-						float distance = Vector2.Distance(transform.position, coll.transform.position);
-
 						coll.rigidbody2D.velocity = force;
 
 						coll.networkView.RPC ("applyDamage", coll.networkView.owner, damage);

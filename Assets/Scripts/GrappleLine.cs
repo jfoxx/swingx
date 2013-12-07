@@ -34,17 +34,15 @@ public class GrappleLine : MonoBehaviour
 	
 	void Update ()
 	{
-		if(networkView.isMine){
-			line.SetPosition (0, player.transform.position);
-			line.SetPosition (1, grapple.transform.position);
-		}
+//		if(networkView.isMine){
+//			line.SetPosition (0, player.transform.position);
+//			line.SetPosition (1, grapple.transform.position);
+//		}
 
 		if (!networkView.isMine)
 		{      
 			float currentTime = (float)Network.time;
 			float interpolationTime = currentTime - interpolationBackTime;
-
-			Debug.Log("networkview inte mine");
 
 			if (m_BufferedState[0] != null && m_BufferedState[0].timeStamp > interpolationTime)
 			{
@@ -80,9 +78,11 @@ public class GrappleLine : MonoBehaviour
 
 				if (m_BufferedState[0] != null)
 				{
-					LineState latest = m_BufferedState[0];
-					player.transform.position = latest.plPos;
-					grapple.transform.position = latest.grPos;
+					if(grapple != null && player != null){
+						LineState latest = m_BufferedState[0];
+						player.transform.position = latest.plPos;
+						grapple.transform.position = latest.grPos;
+					}
 				}
 			}
 		}
@@ -131,4 +131,11 @@ public class GrappleLine : MonoBehaviour
 			}
 		}
 	}
+
+	void OnDestroy(){
+		if(networkView.isMine){
+			Network.RemoveRPCs(networkView.viewID);
+		}
+	}
+
 }

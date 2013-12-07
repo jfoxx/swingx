@@ -20,6 +20,7 @@ public class NetworkManager : MonoBehaviour
 	public bool gameHasStarted = false;
 	public bool cameraSpawned = false;
 
+	string playerName;
 
 	float refreshRequestLength = 5f;
 	HostData[] hostData;
@@ -28,6 +29,10 @@ public class NetworkManager : MonoBehaviour
 
 	void Start ()
 	{
+		playerName = PlayerPrefs.GetString("playerName");
+		if(playerName == ""){
+			playerName = "player " + Random.Range(100, 999);
+		}
 		gameTypeName = "swingX_" + Application.unityVersion + "_server";
 		Debug.Log (gameTypeName);
 		gameManager = GetComponent<GameManager_mp>();
@@ -80,6 +85,7 @@ public class NetworkManager : MonoBehaviour
 		
 		Debug.Log ("Spawn player");		
 		playerObject = Network.Instantiate (PlayerPrefab, Vector3.zero, Quaternion.identity, 0) as GameObject;
+		playerObject.transform.name = playerName;
 		
 		cameraObject.gameObject.GetComponent<Follow_mp>().target = playerObject.transform;
 		
@@ -164,10 +170,6 @@ public class NetworkManager : MonoBehaviour
 	
 	void OnGUI ()
 	{		
-		if(!isAlive && gameHasStarted){
-			Debug.Log("now its false");
-		}
-
 		if (!isAlive && gameHasStarted) 
 		{
 			float respawnButtonHeight = 150;
@@ -202,11 +204,17 @@ public class NetworkManager : MonoBehaviour
 		float left = Screen.width / 2 - width;
 		float top = Screen.height / 2 - height / 2;
 		
-		GUILayout.BeginArea (new Rect (left, top, width, height));
+		GUILayout.BeginArea (new Rect (left, top, width, height));	
+
+		GUILayout.Space (5);
 		
-		
+		playerName = GUILayout.TextField (playerName);
+
+		GUILayout.Space (5);
+
 		if (GUILayout.Button ("Start new Server")) {
 			startServer ();
+			PlayerPrefs.SetString("playerName", playerName);
 		}
 		
 		GUILayout.Space (5);
@@ -223,6 +231,7 @@ public class NetworkManager : MonoBehaviour
 				
 				if (GUILayout.Button (host.gameName)) {
 					Network.Connect (host);
+					PlayerPrefs.SetString("playerName", playerName);
 				}
 			}
 		}

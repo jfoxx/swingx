@@ -9,6 +9,7 @@ public class GameState : MonoBehaviour
 	public bool showMenu;
 	public bool mouseAim = true;
 	private static GameState instance;
+	public bool paused = false;
 
 	public static GameState Instance {
 		get {
@@ -72,5 +73,15 @@ public class GameState : MonoBehaviour
 
 		GUI.Label(new Rect (Screen.width/2 - 15, 30, 300, 30), currentLevel);
 
+	}
+
+	public void pause(){
+		Time.timeScale = 0.0f;
+		paused = true;
+	}
+
+	public void resume(){
+		Time.timeScale = 1.0f;
+		paused = false;
 	}
 }

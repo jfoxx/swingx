@@ -43,6 +43,7 @@ public class Health_mp : MonoBehaviour
 			Network.Instantiate(explosionPrefab, transform.position, Quaternion.identity,0);
 		}
 
+		Network.RemoveRPCs(networkView.viewID);
 		Network.Destroy(gameObject);
 	}
 	

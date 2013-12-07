@@ -5,9 +5,12 @@ public class MenuGui : MonoBehaviour {
 
 	GameState state;
 	public bool mouseAim = false;
+
+
 	void Start () {
 		state = GameState.Instance;
 	}
+
 
 	void Update () {
 			
@@ -21,6 +24,17 @@ public class MenuGui : MonoBehaviour {
 				Application.LoadLevel("main");
 			}
 			state.mouseAim = GUI.Toggle(new Rect(30, 70, 150, 20), state.mouseAim, "use mouse to aim");
+
+			string pauseText = state.paused ? "Resume" : "Pause";
+
+			if (GUI.Button (new Rect (250, 30, 150, 30), pauseText))
+			{
+				if(state.paused){
+					state.resume();
+				}else{
+					state.pause();
+				}
+			}
 		}
 	}
 }
