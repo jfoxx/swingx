@@ -29,6 +29,12 @@ public class Health_mp : MonoBehaviour
 	{
 		Debug.Log ("damage taken: " + damage);
 		health -= damage;
+		networkView.RPC("updatePlayerHealth", RPCMode.Others, health);
+	}
+
+	[RPC]
+	void updatePlayerHealth(float pHealth){
+		health = pHealth;
 	}
 
 	void onKillZone ()

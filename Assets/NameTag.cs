@@ -4,16 +4,32 @@ using System.Collections;
 public class NameTag : MonoBehaviour {
 
 	string playerName = "Player";
-	Health_mp health;
+	float health = 0;
 	TextMesh text;
+	bool nameSet = false;
 
 	void Start () {
-		playerName = transform.parent.name;
+		if(networkView.isMine){
+			playerName = PlayerPrefs.GetString("playerName");
+		}
 		text = GetComponent<TextMesh>();
-		health = transform.parent.GetComponent<Health_mp>();
 	}
 
-	void Update(){
-		text.text = playerName + " | + " + health.health;
+	[RPC]
+	void updatePlayerName(string pName){
+		playerName = pName;
+		nameSet = true;
 	}
+	
+	void Update(){
+
+		if(!nameSet && networkView.isMine){
+			networkView.RPC("updatePlayerName", RPCMode.OthersBuffered, PlayerPrefs.GetString("playerName"));
+			nameSet = true;
+		}
+
+		health = transform.parent.GetComponent<Health_mp>().health;
+		text.text = playerName;
+	}
+
 }

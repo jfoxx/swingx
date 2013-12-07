@@ -46,8 +46,7 @@ public class NetworkManager : MonoBehaviour
 		
 		Debug.Log ("Refreshing host...");
 		MasterServer.RequestHostList (gameTypeName);
-		
-		float timeStarted = Time.time;
+
 		float timeEnd = Time.time + refreshRequestLength;
 		
 		while (Time.time < timeEnd) {

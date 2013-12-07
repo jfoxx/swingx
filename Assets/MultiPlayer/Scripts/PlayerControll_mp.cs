@@ -259,9 +259,4 @@ public class PlayerControll_mp : MonoBehaviour
 		}
 	}
 
-	[RPC]
-	string getName(){
-		return PlayerPrefs.GetString("playerName");
-	}
-	
 }
