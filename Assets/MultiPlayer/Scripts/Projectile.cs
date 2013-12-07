@@ -25,7 +25,7 @@ public class Projectile : MonoBehaviour {
 	void Update () {
 		if(networkView.isMine){
 			if(detonate){
-				//Network.Destroy(gameObject);
+				Network.Destroy(gameObject);
 			}
 		}
 	}

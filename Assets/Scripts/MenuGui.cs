@@ -1,40 +1,65 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MenuGui : MonoBehaviour {
+public class MenuGui : MonoBehaviour
+{
 
 	GameState state;
 	public bool mouseAim = false;
+	private float top;
+	private float left;
+	private float height;
+	private float width;
+	private Rect menuWindowRect;
 
-
-	void Start () {
+	void Start ()
+	{
 		state = GameState.Instance;
 	}
 
-
-	void Update () {
-			
+	void Update ()
+	{
+		height = Screen.height / 2;
+		width = 300;
+		top = (Screen.height / 2) - (height/2);
+		left = (Screen.width / 2) - (width/2);
+		
+		menuWindowRect = new Rect (left, top, width, height);
 	}
 
-	void OnGUI(){
-		if(state.showMenu){
-			if (GUI.Button (new Rect (30, 30, 150, 30), "Main Menu"))
-			{
-				GameState.Instance.setLevel("main");
-				Application.LoadLevel("main");
-			}
-			state.mouseAim = GUI.Toggle(new Rect(30, 70, 150, 20), state.mouseAim, "use mouse to aim");
+	void OnGUI ()
+	{
+		if (!state.showMenu) {
+			return;
+		}
 
-			string pauseText = state.paused ? "Resume" : "Pause";
+		menuWindowRect = GUI.Window (1, menuWindowRect, windowFunction, "Menu");
+	}
 
-			if (GUI.Button (new Rect (250, 30, 150, 30), pauseText))
-			{
-				if(state.paused){
-					state.resume();
-				}else{
-					state.pause();
-				}
+	void windowFunction (int windowID)
+	{
+
+		if (GUILayout.Button ("Main Menu")) {
+			GameState.Instance.setLevel ("main");
+			Application.LoadLevel ("main");
+		}
+
+		GUILayout.Space (10);
+
+		state.mouseAim = GUILayout.Toggle (state.mouseAim, "use mouse to aim");
+
+		GUILayout.Space (10);
+
+		string pauseText = state.paused ? "Resume" : "Pause";
+		
+		if (GUILayout.Button (pauseText)) {
+			if (state.paused) {
+				state.resume ();
+			} else {
+				state.pause ();
 			}
 		}
+		GUILayout.FlexibleSpace ();
+	
 	}
 }

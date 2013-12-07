@@ -18,15 +18,14 @@ public class Explosion : MonoBehaviour {
 
 				if(coll.transform.CompareTag("Player")){
 
-					if(!coll.networkView.isMine){
-					
-						Vector2 force = coll.transform.TransformDirection(transform.position);
-
-						coll.rigidbody2D.velocity = force;
-
+					if(!coll.networkView.isMine)
+					{
 						coll.networkView.RPC ("applyDamage", coll.networkView.owner, damage);
-
 					}
+
+					Vector2 force = coll.transform.position - transform.position;
+					
+					coll.rigidbody2D.velocity = (force * 50);
 				}
 			}
 		}
