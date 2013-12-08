@@ -51,8 +51,6 @@ public class PlayerControll_mp : MonoBehaviour
 			return;
 		}
 
-//		Transform grappleLineObject = Network.Instantiate(grappleLinePrefab, transform.position, Quaternion.identity, 0) as Transform;
-
 		spring = GetComponent<SpringJoint2D> ();
 		spring.enabled = false;
 
@@ -64,20 +62,10 @@ public class PlayerControll_mp : MonoBehaviour
 		spring.connectedBody = grapplePointObject.rigidbody2D;
 		spring.connectedBody.transform.parent = transform;
 
-		//grappleLineObject = transform.FindChild("GrappleLine_mp");
-		//grappleLineObject.GetComponent<GrappleLine>().grapple = grapplePointObject.transform;
 
 		grappleLineObject = transform.FindChild("Lightning Emitter");
 		grappleLineObject.GetComponent<LightningBolt>().target = grapplePointObject.transform;
-//		grappleLineObject.gameObject.GetComponent<GrappleLine>().grapple = grapplePointObject.transform;
-//		grappleLineObject.transform.parent = transform;
-
 		
-
-	}
-
-	void OnCollisionStay2D (Collision2D coll)
-	{
 
 	}
 
@@ -95,7 +83,7 @@ public class PlayerControll_mp : MonoBehaviour
 			grappleSet = false;
 		}
 
-		spring.distance += scroll;
+//		spring.distance += scroll;
 	
 		RaycastHit2D groundScanner = Physics2D.Raycast (groundScannerTransform.transform.position, -Vector2.up, 0.2f);
 
@@ -231,26 +219,14 @@ public class PlayerControll_mp : MonoBehaviour
 		
 	}
 
-//	void OnCollisionEnter2D (Collision2D coll)
-//	{
-//		if (coll.relativeVelocity.magnitude > 20) {
-//			audioSource.PlayOneShot (bumpSound);
-//		}
-//
-//		if(networkView.isMine)
-//		{
-//			if(coll.transform.rigidbody2D == null){return;}
-//			Debug.Log("Collision !" );
-//
-//			if(coll.relativeVelocity.magnitude > 30 && coll.transform.rigidbody2D.velocity.magnitude > transform.rigidbody2D.velocity.magnitude){
-//				
-//				Debug.Log("velocity : " + coll.relativeVelocity.magnitude);
-//
-//				coll.transform.networkView.RPC("applyDamage", RPCMode.All ,coll.relativeVelocity.magnitude * 0.3f);
-//			}
-//		}
-//
-//	}
+	void OnCollisionEnter2D (Collision2D coll)
+	{
+		if (coll.relativeVelocity.magnitude > 20) 
+		{
+			audioSource.PlayOneShot (bumpSound);
+		}
+
+	}
 
 	void OnDestroy()
 	{
