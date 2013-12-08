@@ -107,11 +107,20 @@ public class Chat : MonoBehaviour {
 			inputAreaRect = new Rect (inputleft, inputtop, inputwidth, inputheight);
 			GUILayout.BeginArea (inputAreaRect);
 
+			GUI.SetNextControlName("MyTextField");
+
 			_message = GUILayout.TextField( _message);
 
-			if (Event.current.character == '\n' && showChat)
+			GUI.FocusControl("MyTextField");
+
+			if ((Event.current.character == '\n' && showChat))
 			{
 				enterPressed = true;
+			}
+
+			if (Event.current.keyCode == KeyCode.Escape)
+			{
+				toggleChat();
 			}
 
 			GUILayout.EndArea();
