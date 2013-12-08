@@ -42,14 +42,24 @@ public class Projectile : MonoBehaviour {
 		if (coll.relativeVelocity.magnitude > 20) {
 			audioSource.PlayOneShot (bumpSound);
 		}
+//
+//		if(networkView.isMine){
+//
+//			if(coll.transform.networkView != null){
+//
+//				if(!coll.transform.networkView.isMine && coll.transform.CompareTag("Player")){
+//					Network.Destroy(gameObject);
+//				}
+//			}
+//		}
+	}
 
-		if(networkView.isMine){
-
-			if(coll.transform.networkView != null){
-
-				if(!coll.transform.networkView.isMine && coll.transform.CompareTag("Player")){
-					Network.Destroy(gameObject);
-				}
+	void OnTriggerStay2D(Collider2D other) {
+		if(!networkView.isMine){return;}
+		if(other.transform.networkView != null){
+			
+			if(!other.transform.networkView.isMine && other.transform.CompareTag("Player")){
+				Network.Destroy(gameObject);
 			}
 		}
 	}
