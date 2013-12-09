@@ -10,81 +10,154 @@ public class PlayerManager_mp : MonoBehaviour {
 
 	public int playerCount = 0;
 
-	private static PlayerManager_mp instance;
-	
-	public static PlayerManager_mp Instance
-	{
-		get
-		{
-			if(instance == null)
-			{
-				instance = new PlayerManager_mp();
-			}
-			
-			return instance;
+	public virtual string playerName {
+		get {
+			return PlayerPrefs.GetString("playerName");
 		}
-	}	
+	}
 
 	void Start ( ) 
 	{
-		instance = this;
 		gameState = GameState.Instance;
 		players = new List<Player>();
 	}
 	
 	[RPC]
-	void addPlayer(NetworkPlayer nPlayer){
-
-		bool exists = false;
-		foreach(Player pl in players)
+	void addPlayer(NetworkPlayer nPlayer)
+	{
+		int index = -1;
+		
+		for(int i = 0; i < players.Count; i++ )
 		{
-			if(pl.netId == int.Parse(nPlayer.ToString()))
+			if(players[i].networkPlayer == nPlayer)
 			{
-				Debug.Log("Player " + pl + " already exists in playerlist");
-				exists = true;
+				index = i;
 			}
 		}
-
-		if(!exists)
+		
+		if(index == -1) // add the player if its not in the list.
 		{
+			Debug.Log("Player [" + nPlayer.ToString() + "] not found.");
+			Debug.Log("adding Player + [" + nPlayer.ToString() + "]");
 			Player pl = new Player();
 			pl.score = 0;
-			pl.health = 100;
+			pl.networkPlayer = nPlayer;
 			players.Add(pl);
+			playerCount++;
 		}
 	}
 	
 	[RPC]
-	void removePlayer(NetworkPlayer nPlayer){
-		
-		Player playerToRemove = null;
-		foreach(Player pl in players)
+	void removePlayer(NetworkPlayer nPlayer)
+	{
+		int index = -1;
+
+		for(int i = 0; i < players.Count; i++ )
 		{
-			if(pl.netId == int.Parse(nPlayer.ToString()))
+			if(players[i].networkPlayer == nPlayer)
 			{
-				playerToRemove = pl;
+				index = i;
+				return;
 			}
 		}
-		players.Remove(playerToRemove);
+
+		if(index == -1)
+		{
+			Debug.Log("Player [" + nPlayer.ToString() + "] not found.");
+			return;
+		}
+
+		players.RemoveAt(index);
+		playerCount--;
+
 	}	
 
-	void OnServerInitialized ()
+	[RPC]
+	void updatePlayerHealth(NetworkPlayer nPlayer, float newHealth)
 	{
-		networkView.RPC("addPlayer", RPCMode.AllBuffered, Network.player);
+		int index = -1;
+
+		for(int i = 0; i < players.Count; i++ )
+		{
+			if(players[i].networkPlayer == nPlayer)
+			{
+				players[i].health = newHealth;
+				index = i;
+				return;
+			}
+		}
+
+		if(index == -1)
+		{
+			Debug.Log("Player [" + nPlayer.ToString() + "] not found.");
+		}
 	}
-	
+
+	[RPC]
+	void updatePlayerName(NetworkPlayer nPlayer, string pName)
+	{	
+		int index = -1;
+
+		if(pName == "" || pName == null){
+			pName = "Player " + Random.Range(1, 100);
+		}
+
+		for(int i = 0; i < players.Count; i++ )
+		{
+			if(players[i].networkPlayer == nPlayer)
+			{
+				players[i].name = pName;
+				index = i;
+				return;
+			}
+		}
+		
+		if(index == -1)
+		{
+			Debug.Log("Player [" + nPlayer.ToString() + "] not found.");
+		}
+	}
+
+	// server connected, add player to list
+	void OnServerInitialized () 
+	{
+		if(Network.isServer)
+		{
+			networkView.RPC("addPlayer", RPCMode.AllBuffered, Network.player);
+			publishName();
+		}
+	}
+
+	// a client connected, add player to list
 	void OnPlayerConnected (NetworkPlayer player)
 	{
-		Debug.Log ("Player " + playerCount + " connected from " + player.ipAddress + ":" + player.port);	
-		addPlayer(player);
-		networkView.RPC("addPlayer", RPCMode.OthersBuffered, Network.player);
+		if(Network.isServer)
+		{
+			networkView.RPC("addPlayer", RPCMode.AllBuffered, player); 
+		}
 	}
-	
+
+	// a client disconnected, remove from the list
 	void OnPlayerDisconnected (NetworkPlayer player)
-	{	
-		Network.DestroyPlayerObjects (player);
-		removePlayer(player);
-		networkView.RPC("removePlayer", RPCMode.OthersBuffered, Network.player);		
+	{
+			networkView.RPC("removePlayer", RPCMode.AllBuffered, player);
+			removePlayer(player);
+			Debug.Log ("Clean up after player " + player);
+			Network.RemoveRPCs (player);
+			Network.DestroyPlayerObjects (player);
+	}
+
+	// im a client and i just connected my name is:
+	void OnConnectedToServer() 
+	{
+		Debug.Log("im a client and i just connected my name is:");
+		publishName();
+	}
+
+	void publishName()
+	{
+		Debug.Log("publish my name [" + playerName + "]");
+		networkView.RPC("updatePlayerName", RPCMode.AllBuffered, networkView.owner, playerName);
 	}
 }
 
@@ -94,7 +167,7 @@ public class Player
 	public int score;
 	public string name;
 	public float health;
-	public int netId;
+	public NetworkPlayer networkPlayer;
 	
 }
 

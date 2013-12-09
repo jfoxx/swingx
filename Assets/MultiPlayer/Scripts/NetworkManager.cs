@@ -14,7 +14,8 @@ public class NetworkManager : MonoBehaviour
 
 	GameObject cameraObject;
 	GameObject playerObject;
-	
+
+
 	public string gameTypeName;
 
 	public bool isRefreshing = false;
@@ -24,6 +25,8 @@ public class NetworkManager : MonoBehaviour
 
 	Rect serverWindowRect;
 	Rect menuWindowRect;
+
+	PlayerManager_mp playerManager;
 
 	string playerName;
 
@@ -45,6 +48,7 @@ public class NetworkManager : MonoBehaviour
 		gameHasStarted = false;
 		Instance = this;
 		StartCoroutine ("RefreshHostList");
+		playerManager = GetComponent<PlayerManager_mp>();
 	}
 	
 	public IEnumerator RefreshHostList ()
@@ -117,6 +121,7 @@ public class NetworkManager : MonoBehaviour
 		Debug.Log ("server init.");
 		MasterServer.RegisterHost (gameTypeName, "swingX_server_" + Random.Range (1000, 9999));
 		spawnMap();
+		spawnCamera();
 		gameHasStarted = true;
 	}
 
@@ -142,21 +147,19 @@ public class NetworkManager : MonoBehaviour
 	{
 		Debug.Log ("New object instantiated by " + info.sender);
 	}
+
+	void OnPlayerConnected (NetworkPlayer player)
+	{
+		Debug.Log ("Player " + player.ToString() + " connected from " + player.ipAddress + ":" + player.port);	
+	}
 	
 	void OnPlayerDisconnected (NetworkPlayer player)
-	{
-		
-		Debug.Log ("Clean up after player " + player);
-		Network.RemoveRPCs (player);
-		Network.DestroyPlayerObjects (player);
-		
+	{	
+		Debug.Log ("Player " + player.ToString() + " disconnected from " + player.ipAddress + ":" + player.port);	
 	}
 
 	void OnDisconnectedFromServer(NetworkDisconnection info) {
 		Debug.Log("Disconnected from server: " + info);
-		if(Network.isClient){
-			Application.LoadLevel(GameState.Instance.currentLevel);
-		}
 	}
 
 	

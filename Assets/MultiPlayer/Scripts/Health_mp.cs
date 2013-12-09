@@ -8,11 +8,14 @@ public class Health_mp : MonoBehaviour
 	public float health;
 	public float max_health = 100;
 	
-	
-	// Use this for initialization
+	GameObject manager;
+
 	void Start ()
 	{
 		health = max_health;
+
+		manager = GameObject.Find ("Manager");
+		manager.networkView.RPC ("updatePlayerHealth", RPCMode.All, networkView.owner, health);
 	}
 	
 	// Update is called once per frame
@@ -28,8 +31,12 @@ public class Health_mp : MonoBehaviour
 	void applyDamage (float damage)
 	{
 		Debug.Log ("damage taken: " + damage);
+
 		health -= damage;
+
 		networkView.RPC("updatePlayerHealth", RPCMode.Others, health);
+
+		manager.networkView.RPC ("updatePlayerHealth", RPCMode.All, networkView.owner, health);
 	}
 
 	[RPC]
@@ -45,6 +52,7 @@ public class Health_mp : MonoBehaviour
 	void die ()
 	{
 		Debug.Log ("i died!");
+
 		if(explosionPrefab != null){
 			Network.Instantiate(explosionPrefab, transform.position, Quaternion.identity,0);
 		}

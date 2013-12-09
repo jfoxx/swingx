@@ -48,27 +48,37 @@ public class MenuGui : MonoBehaviour
 			Application.LoadLevel ("main");
 		}
 
-
-		GUILayout.Space (10);
-
-		string pauseText = state.paused ? "Resume" : "Pause";
-		
-		if (GUILayout.Button (pauseText)) {
-			if (state.paused) {
-				state.resume ();
-			} else {
-				state.pause ();
-			}
-		}
-
 		GUILayout.Space (10);
 		
 		state.mouseAim = GUILayout.Toggle (state.mouseAim, "use mouse to aim");
 
 		GUILayout.FlexibleSpace ();
 
-		if(!Application.isEditor && !Application.isWebPlayer){
-			if(GUILayout.Button("Quit")){
+		if (Network.isServer) {
+			
+			if(GUILayout.Button("Disconnect"))
+			{
+				Network.Disconnect (200);
+				MasterServer.UnregisterHost ();
+			}
+			
+		}
+
+		GUILayout.Space (10);
+
+		if (Network.isClient) {			
+			if(GUILayout.Button("Disconnect"))
+			{
+				Network.Disconnect (200);			
+			}
+		}
+
+		GUILayout.Space (10);
+
+		if(!Application.isEditor && !Application.isWebPlayer)
+		{
+			if(GUILayout.Button("Quit"))
+			{
 				Application.Quit();
 			}
 		}
