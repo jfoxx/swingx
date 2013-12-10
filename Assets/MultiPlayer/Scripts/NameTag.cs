@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NameTag : MonoBehaviour {
+public class NameTag : MonoBehaviour 
+{
 
 	string playerName = "Player";
 	float health = 0;
@@ -9,9 +10,8 @@ public class NameTag : MonoBehaviour {
 	bool nameSet = false;
 	PlayerManager_mp playerManager;
 
-	float timer = 2;
-
-	void Start () {
+	void Start () 
+	{
 
 		playerManager = GameObject.Find ("Manager").GetComponent<PlayerManager_mp>();
 
@@ -22,28 +22,9 @@ public class NameTag : MonoBehaviour {
 		text = GetComponent<TextMesh>();
 
 	}
-
-	[RPC]
-	void updatePlayerName(string pName){
-		playerName = pName;
-		nameSet = true;
-	}
-
-	void Update(){
-
-		if(timer > 0){
-			timer -= Time.deltaTime;
-		}
-
-		if(!nameSet && networkView.isMine && timer < 0 ){
-
-			networkView.RPC("updatePlayerName", RPCMode.AllBuffered, PlayerPrefs.GetString("playerName"));
-
-			playerManager.networkView.RPC("updatePlayerName", RPCMode.AllBuffered, networkView.owner, PlayerPrefs.GetString("playerName"));
-
-			nameSet = true;
-		}
-
+	
+	void Update()
+	{
 		health = transform.parent.GetComponent<Health_mp>().health;
 
 		text.text = playerName;

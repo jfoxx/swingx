@@ -5,8 +5,11 @@ public class Projectile : MonoBehaviour {
 
 	public AudioClip bumpSound;
 	public Transform explosionPrefab;
+	public Transform explosionObject;
 	public float startSpeed = 100;
 	AudioSource audioSource;
+
+	NetworkPlayer creator;
 
 	private bool isShot = false;
 
@@ -16,13 +19,18 @@ public class Projectile : MonoBehaviour {
 		} 
 	}
 
-	void Start () {
+	void Start () 
+	{
 		audioSource = GetComponent<AudioSource>();
 		rigidbody2D.velocity = transform.TransformDirection(Vector2.right * startSpeed);
+
 		if(!networkView.isMine){return;}
+
+		creator = networkView.owner;
 	}
 
-	void Update () {
+	void Update () 
+	{
 		if(networkView.isMine){
 			if(detonate){
 				//Network.Destroy(gameObject);
@@ -30,8 +38,10 @@ public class Projectile : MonoBehaviour {
 		}
 	}
 
-	void OnDestroy(){
-		Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+	void OnDestroy()
+	{
+		explosionObject = Instantiate(explosionPrefab, transform.position, Quaternion.identity) as Transform;
+
 		if(networkView.isMine){
 			Network.RemoveRPCs(networkView.viewID);
 		}
@@ -42,16 +52,6 @@ public class Projectile : MonoBehaviour {
 		if (coll.relativeVelocity.magnitude > 20) {
 			audioSource.PlayOneShot (bumpSound);
 		}
-//
-//		if(networkView.isMine){
-//
-//			if(coll.transform.networkView != null){
-//
-//				if(!coll.transform.networkView.isMine && coll.transform.CompareTag("Player")){
-//					Network.Destroy(gameObject);
-//				}
-//			}
-//		}
 	}
 
 	void OnTriggerStay2D(Collider2D other) {

@@ -108,7 +108,6 @@ public class PlayerManager_mp : MonoBehaviour {
 			{
 				players[i].name = pName;
 				index = i;
-				return;
 			}
 		}
 		
@@ -124,7 +123,7 @@ public class PlayerManager_mp : MonoBehaviour {
 		if(Network.isServer)
 		{
 			networkView.RPC("addPlayer", RPCMode.AllBuffered, Network.player);
-			publishName();
+			StartCoroutine("updatePlayerNameAfterSeconds");
 		}
 	}
 
@@ -147,18 +146,25 @@ public class PlayerManager_mp : MonoBehaviour {
 			Network.DestroyPlayerObjects (player);
 	}
 
-	// im a client and i just connected my name is:
 	void OnConnectedToServer() 
 	{
-		Debug.Log("im a client and i just connected my name is:");
-		publishName();
+		Debug.Log("im a client and i just connected, my name is: " + playerName );
+		StartCoroutine("updatePlayerNameAfterSeconds");
 	}
 
 	void publishName()
 	{
 		Debug.Log("publish my name [" + playerName + "]");
-		networkView.RPC("updatePlayerName", RPCMode.AllBuffered, networkView.owner, playerName);
+		updatePlayerName(Network.player, playerName);
+		networkView.RPC("updatePlayerName", RPCMode.AllBuffered, Network.player, playerName);
 	}
+
+	public IEnumerator updatePlayerNameAfterSeconds ()
+	{
+		yield return new WaitForSeconds(2);
+		publishName();
+	}
+	
 }
 
 [System.Serializable]

@@ -45,6 +45,8 @@ public class PlayerControll_mp : MonoBehaviour
 
 	void Start ()
 	{
+		audioSource = GetComponent<AudioSource> ();
+
 		if(!networkView.isMine){
 			rigidbody2D.Sleep();
 			rigidbody2D.isKinematic = true;
@@ -55,7 +57,7 @@ public class PlayerControll_mp : MonoBehaviour
 		spring.enabled = false;
 
 		grapplePosition = transform.position;
-		audioSource = GetComponent<AudioSource> ();
+
 
 		Transform grapplePointObject = Instantiate(grapplePointPrefab, transform.position, Quaternion.identity) as Transform;
 
