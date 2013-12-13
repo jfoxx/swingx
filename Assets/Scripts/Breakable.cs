@@ -25,7 +25,7 @@ public class Breakable : MonoBehaviour {
 		if(coll.relativeVelocity.magnitude > 70){
 			Debug.Log(coll.relativeVelocity.magnitude);
 			audioSource.PlayOneShot(crackSound);
-			transform.SendMessage("applyDamage", coll.relativeVelocity.magnitude * 0.6f, SendMessageOptions.DontRequireReceiver);
+			transform.SendMessage("applyDamage", coll.relativeVelocity.magnitude * 10, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 

@@ -86,8 +86,10 @@ public class NetworkManager : MonoBehaviour
 	private void spawnMap ()
 	{
 		
-		Debug.Log ("Spawn Map");		
-		Network.Instantiate (MapPrefab, Vector3.zero, Quaternion.identity, 0);
+		Debug.Log ("Spawn Map");	
+		if(MapPrefab != null){
+			Network.Instantiate (MapPrefab, Vector3.zero, Quaternion.identity, 0);
+		}
 	
 	}
 
