@@ -117,6 +117,31 @@ public class PlayerManager_mp : MonoBehaviour {
 		}
 	}
 
+	public string getPlayerName(NetworkPlayer nPlayer)
+	{
+		int index = -1;
+
+		string nPlayerName = "Player";
+
+		for(int i = 0; i < players.Count; i++ )
+		{
+			if(players[i].networkPlayer == nPlayer)
+			{
+				nPlayerName = players[i].name;
+				index = i;
+			}
+		}
+
+		
+		if(index == -1)
+		{
+			Debug.Log("Player [" + nPlayer.ToString() + "] not found.");
+		}
+
+		return nPlayerName;
+
+	}
+
 	// server connected, add player to list
 	void OnServerInitialized () 
 	{

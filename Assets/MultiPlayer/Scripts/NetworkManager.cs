@@ -10,7 +10,6 @@ public class NetworkManager : MonoBehaviour
 
 	public GameObject PlayerPrefab;
 	public GameObject CameraPrefab;
-	public GameObject MapPrefab;
 
 	GameObject cameraObject;
 	GameObject playerObject;
@@ -82,14 +81,6 @@ public class NetworkManager : MonoBehaviour
 		Network.InitializeServer (8, 26566, !Network.HavePublicAddress ());
 		
 	}
-	
-	private void spawnMap ()
-	{
-		
-		Debug.Log ("Spawn Map");		
-		Network.Instantiate (MapPrefab, Vector3.zero, Quaternion.identity, 0);
-	
-	}
 
 	private void spawnPlayer ()
 	{
@@ -120,7 +111,6 @@ public class NetworkManager : MonoBehaviour
 	{
 		Debug.Log ("server init.");
 		MasterServer.RegisterHost (gameTypeName, "swingX_server_" + Random.Range (1000, 9999));
-		spawnMap();
 		spawnCamera();
 		gameHasStarted = true;
 	}

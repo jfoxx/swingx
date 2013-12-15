@@ -40,9 +40,10 @@ public class Projectile : MonoBehaviour {
 
 	void OnDestroy()
 	{
-		explosionObject = Instantiate(explosionPrefab, transform.position, Quaternion.identity) as Transform;
 
 		if(networkView.isMine){
+			explosionObject = Network.Instantiate(explosionPrefab, transform.position, Quaternion.identity, 0) as Transform;
+			explosionObject.GetComponent<Explosion>().creator = networkView.owner;
 			Network.RemoveRPCs(networkView.viewID);
 		}
 	}

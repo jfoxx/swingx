@@ -26,18 +26,20 @@ public class Health_mp : MonoBehaviour
 			die ();
 		}
 	}
+	
 
 	[RPC]
-	void applyDamage (float damage)
+	void applyDamage (float damage, NetworkPlayer creator)
 	{
-		Debug.Log ("damage taken: " + damage);
-
+		Debug.Log ("damage taken: " + damage + "from" + creator);
+		
 		health -= damage;
-
+		
 		networkView.RPC("updatePlayerHealth", RPCMode.Others, health);
-
+		
 		manager.networkView.RPC ("updatePlayerHealth", RPCMode.All, networkView.owner, health);
 	}
+
 
 	[RPC]
 	void updatePlayerHealth(float pHealth){

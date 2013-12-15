@@ -5,6 +5,7 @@ public class Explosion : MonoBehaviour {
 
 	public float damage = 30f;
 	public float radius = 10f;
+	public NetworkPlayer creator;
 
 	void Start () 
 	{
@@ -20,7 +21,7 @@ public class Explosion : MonoBehaviour {
 
 					if(!coll.networkView.isMine)
 					{
-						coll.networkView.RPC ("applyDamage", coll.networkView.owner, damage);
+						coll.networkView.RPC ("applyDamage", coll.networkView.owner, damage, creator);
 					}
 
 					Vector2 force = coll.transform.position - transform.position;

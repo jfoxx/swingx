@@ -223,7 +223,7 @@ public class PlayerControll_mp : MonoBehaviour
 
 	void OnCollisionEnter2D (Collision2D coll)
 	{
-		if (coll.relativeVelocity.magnitude > 20) 
+		if (coll.relativeVelocity.magnitude > 60) 
 		{
 			audioSource.PlayOneShot (bumpSound);
 		}

@@ -18,16 +18,19 @@ public class NameTag : MonoBehaviour
 		if(networkView.isMine){
 			playerName = playerManager.playerName;
 		}
+		else{
+			playerName = playerManager.getPlayerName(networkView.owner);
+		}
 
 		text = GetComponent<TextMesh>();
 
+		text.text = playerName;
 	}
 	
 	void Update()
 	{
 		health = transform.parent.GetComponent<Health_mp>().health;
 
-		text.text = playerName;
 	}
 
 }
