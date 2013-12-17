@@ -53,14 +53,18 @@ public class Health_mp : MonoBehaviour
 	
 	void die ()
 	{
-		Debug.Log ("i died!");
+		if(networkView.isMine)
+		{
+			if(explosionPrefab != null)
+			{
+				Network.Instantiate(explosionPrefab, transform.position, Quaternion.identity,0);
+			}
 
-		if(explosionPrefab != null){
-			Network.Instantiate(explosionPrefab, transform.position, Quaternion.identity,0);
+			manager.networkView.RPC("updatePlayerDeaths", RPCMode.AllBuffered, networkView.owner);
+
+			Network.RemoveRPCs(networkView.viewID);
+			Network.Destroy(gameObject);
 		}
-
-		Network.RemoveRPCs(networkView.viewID);
-		Network.Destroy(gameObject);
 	}
 	
 	void OnDestroy ()
@@ -70,6 +74,6 @@ public class Health_mp : MonoBehaviour
 
 	void OnGUI(){
 		if(!networkView.isMine){return;}
-		GUI.Label(new Rect(Screen.width-100, Screen.height - 30, 100, 30), "healt: " + health);
+		GUI.Label(new Rect(Screen.width-100, Screen.height - 30, 100, 30), "health: " + health);
 	}
 }

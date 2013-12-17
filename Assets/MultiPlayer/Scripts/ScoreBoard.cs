@@ -94,14 +94,15 @@ public class ScoreBoard : MonoBehaviour
 		GUILayout.EndVertical ();
 
 		GUILayout.BeginVertical ();
-		GUILayout.Label ("id");
+		GUILayout.Label ("Deaths");
 		foreach (Player player in playerManager.players) 
 		{
-			GUILayout.Label (player.networkPlayer.ToString());
+			GUILayout.Label (player.deaths.ToString());
 
 			GUILayout.Space (5);
 		}
 		GUILayout.EndVertical ();
+
 
 		GUILayout.EndHorizontal ();
 	}

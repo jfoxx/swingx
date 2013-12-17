@@ -21,7 +21,7 @@ public class PlayerManager_mp : MonoBehaviour {
 		gameState = GameState.Instance;
 		players = new List<Player>();
 	}
-	
+
 	[RPC]
 	void addPlayer(NetworkPlayer nPlayer)
 	{
@@ -117,6 +117,66 @@ public class PlayerManager_mp : MonoBehaviour {
 		}
 	}
 
+	[RPC]
+	void updatePlayerScore(NetworkPlayer nPlayer)
+	{	
+		int index = -1;
+		
+		for(int i = 0; i < players.Count; i++ )
+		{
+			if(players[i].networkPlayer == nPlayer)
+			{
+				players[i].score += 1;
+				index = i;
+			}
+		}
+		
+		if(index == -1)
+		{
+			Debug.Log("Player [" + nPlayer.ToString() + "] not found.");
+		}
+	}
+
+	[RPC]
+	void updatePlayerKills(NetworkPlayer nPlayer, int pKills)
+	{	
+		int index = -1;
+		
+		for(int i = 0; i < players.Count; i++ )
+		{
+			if(players[i].networkPlayer == nPlayer)
+			{
+				players[i].kills = pKills;
+				index = i;
+			}
+		}
+		
+		if(index == -1)
+		{
+			Debug.Log("Player [" + nPlayer.ToString() + "] not found.");
+		}
+	}
+
+	[RPC]
+	void updatePlayerDeaths(NetworkPlayer nPlayer)
+	{	
+		int index = -1;
+		
+		for(int i = 0; i < players.Count; i++ )
+		{
+			if(players[i].networkPlayer == nPlayer)
+			{
+				players[i].deaths += 1;
+				index = i;
+			}
+		}
+		
+		if(index == -1)
+		{
+			Debug.Log("Player [" + nPlayer.ToString() + "] not found.");
+		}
+	}
+
 	public string getPlayerName(NetworkPlayer nPlayer)
 	{
 		int index = -1;
@@ -184,6 +244,7 @@ public class PlayerManager_mp : MonoBehaviour {
 		networkView.RPC("updatePlayerName", RPCMode.AllBuffered, Network.player, playerName);
 	}
 
+	// Wait for 2 seconds so the player is added before updating the name.
 	public IEnumerator updatePlayerNameAfterSeconds ()
 	{
 		yield return new WaitForSeconds(2);
@@ -199,6 +260,8 @@ public class Player
 	public string name;
 	public float health;
 	public NetworkPlayer networkPlayer;
+	public int deaths;
+	public int kills;
 	
 }
 

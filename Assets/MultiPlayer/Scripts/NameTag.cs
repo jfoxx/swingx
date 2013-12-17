@@ -23,14 +23,15 @@ public class NameTag : MonoBehaviour
 		}
 
 		text = GetComponent<TextMesh>();
-
-		text.text = playerName;
 	}
 	
 	void Update()
 	{
 		health = transform.parent.GetComponent<Health_mp>().health;
-
+		if(!nameSet){
+			text.text = playerName;
+			nameSet = true;
+		}
 	}
 
 }
